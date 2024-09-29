@@ -9,11 +9,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "review")
@@ -33,4 +37,9 @@ public class Review extends BaseEntity {
 
     @Column(nullable = false,columnDefinition = "TEXT")
     private String content;
+
+    @LastModifiedDate
+    @Column(name = "modified_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime modifiedAt;
 };

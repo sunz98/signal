@@ -26,11 +26,10 @@ public class ChattingMessages extends BaseEntity {
     private ChattingRoom chattingRoom;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User userId;
 
     @Column(nullable = false)
     private String message;
 
-    @Column(nullable = false)
-    private LocalDateTime sentAt;
 }
