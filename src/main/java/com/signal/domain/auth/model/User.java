@@ -49,6 +49,8 @@ public class User extends BaseEntity {
 
     private String keyword;
 
+    private String style;
+
     private Double totalRating;
 
     private String profile;
