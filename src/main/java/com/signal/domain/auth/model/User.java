@@ -1,5 +1,6 @@
 package com.signal.domain.auth.model;
 
+import com.signal.domain.auth.model.enums.AvailableDays;
 import com.signal.domain.auth.model.enums.Gender;
 import com.signal.domain.auth.model.enums.Role;
 import com.signal.global.entity.BaseEntity;
@@ -52,6 +53,9 @@ public class User extends BaseEntity {
     private String style;
 
     private Double totalRating;
+
+    @Enumerated(EnumType.STRING)
+    private AvailableDays availableDays;
 
     private String profile;
 
