@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/chatGPT")
 public class ChatGPTController {
 
-    private final ChatGPTService chatGPTService;
+	private final ChatGPTService chatGPTService;
 
     // ChatGPT 사용 가능한 모델 리스트 조회
     @GetMapping("/modelList")
