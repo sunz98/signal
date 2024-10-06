@@ -1,9 +1,7 @@
-package com.signal.domain.post.dto;
+package com.signal.domain.post.dto.request;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder

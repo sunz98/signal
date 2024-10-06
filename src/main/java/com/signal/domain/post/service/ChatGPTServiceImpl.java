@@ -2,12 +2,10 @@ package com.signal.domain.post.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.signal.domain.post.dto.CompletionRequestDto;
-import com.signal.global.conig.ChatGPTConfig;
+import com.signal.domain.post.dto.request.CompletionRequestDto;
+import com.signal.global.config.ChatGPTConfig;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,44 +26,56 @@ public class ChatGPTServiceImpl implements ChatGPTService {
     @Value("${openai.model}")
     private String model;
 
-    public List<Map<String, Object>> modelList() {
-        log.debug("[+] 모델 리스트를 조회합니다.");
-        List<Map<String, Object>> resultList = null;
-
-        // 토큰 정보가 포함된 Header를 가져옴
-        HttpHeaders headers = chatGPTConfig.httpHeaders();
-
-        // 통신을 위한 RestTemplate를 구성, api를 호출
-        ResponseEntity<String> response = chatGPTConfig.restTemplate()
-            .exchange(
-                "<https://api.openai.com/v1/models/>",
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                String.class
-            );
-
-        try {
-            // Jackson을 기반으로 응답값을 가져옴
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> data = mapper.readValue(response.getBody(), new TypeReference<>() {});
-
-            // 응답 값을 결과값에 넣고 출력
-            resultList = (List<Map<String, Object>>) data.get("data");
-
-            for (Map<String, Object> object : resultList) {
-                log.debug("ID: " + object.get("id"));
-                log.debug("Object" + object.get("object"));
-                log.debug("Created: " + object.get("created"));
-                log.debug("Owned By: " + object.get("owned_by"));
-            }
-        } catch (JsonMappingException e) {
-            log.debug("JsonMappingException :: " + e.getMessage());
-        } catch (JsonProcessingException e) {
-            log.debug("RuntimeException :: " + e.getMessage());
-        }
-
-        return resultList;
-    }
+//    public List<Map<String, Object>> modelList() {
+//        log.debug("[+] 모델 리스트를 조회합니다.");
+//        List<Map<String, Object>> resultList = null;
+//
+//        // 토큰 정보가 포함된 Header를 가져옴
+//        HttpHeaders headers = chatGPTConfig.httpHeaders();
+//
+//        // 통신을 위한 RestTemplate를 구성, api를 호출
+//        ResponseEntity<String> response = chatGPTConfig.restTemplate()
+//            .exchange(
+//                "https://api.openai.com/v1/models/",
+//                HttpMethod.GET,
+//                new HttpEntity<>(headers),
+//                String.class
+//            );
+//
+//        log.debug("Response status code: " + response.getStatusCode());
+//        log.debug("Response body: " + response.getBody());
+//
+//        if (response.getBody() == null) {
+//            log.error("Response body is null.");
+//            throw new IllegalArgumentException("Response body is null");
+//        }
+//
+//        try {
+//            // Jackson을 기반으로 응답값을 가져옴
+//            ObjectMapper mapper = new ObjectMapper();
+//            Map<String, Object> data = mapper.readValue(response.getBody(), new TypeReference<>() {});
+//
+//            // 응답 값을 결과값에 넣고 출력
+//            if (data.containsKey("data")) {
+//                resultList = (List<Map<String, Object>>) data.get("data");
+//            } else {
+//                log.error("Response JSON does not contain 'data' field.");
+//                throw new IllegalArgumentException("Response JSON does not contain 'data' field");
+//            }
+//            for (Map<String, Object> object : resultList) {
+//                log.debug("ID: " + object.get("id"));
+//                log.debug("Object" + object.get("object"));
+//                log.debug("Created: " + object.get("created"));
+//                log.debug("Owned By: " + object.get("owned_by"));
+//            }
+//        } catch (JsonMappingException e) {
+//            log.debug("JsonMappingException :: " + e.getMessage());
+//        } catch (JsonProcessingException e) {
+//            log.debug("RuntimeException :: " + e.getMessage());
+//        }
+//
+//        return resultList;
+//    }
 
     @Override
     public Map<String, Object> isValidModel(String modelName) {
@@ -78,7 +88,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         // 통신을 위한 RestTemplate 구성
         ResponseEntity<String> response = chatGPTConfig.restTemplate()
             .exchange(
-                "<https://api.openai.com/v1/modes/>" + modelName,
+                "https://api.openai.com/v1/models/" + modelName,
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 String.class
@@ -118,10 +128,10 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         }
 
         // 통신을 위한 RestTempleate을 구성
-        HttpEntity<String> requestEntity = new HttpEntity(completionRequestDto, headers);
+        HttpEntity<String> requestEntity = new HttpEntity(requestBody, headers);
         ResponseEntity<String> response =chatGPTConfig.restTemplate()
             .exchange(
-                "<https://api.openai.com/v1/completions>",
+                "https://api.openai.com/v1/completions",
                 HttpMethod.POST,
                 requestEntity,
                 String.class

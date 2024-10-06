@@ -1,15 +1,13 @@
 package com.signal.domain.post.service;
 
-import com.signal.domain.post.dto.CompletionRequestDto;
-import java.util.List;
+import com.signal.domain.post.dto.request.CompletionRequestDto;
 import java.util.Map;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ChatGPTService {
 
-    List<Map<String, Object>> modelList();
+//    List<Map<String, Object>> modelList();
 
     Map<String, Object> isValidModel(String modelName);
 

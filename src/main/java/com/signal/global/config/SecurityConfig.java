@@ -1,4 +1,4 @@
-package com.signal.global.conig;
+package com.signal.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,9 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(
             auth -> auth.requestMatchers(swagger).permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/api/chatGPT/**").permitAll()
+                .anyRequest().permitAll()
+
         );
 
         return http.build();
