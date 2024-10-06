@@ -1,6 +1,7 @@
 package com.signal.domain.post.model;
 
 import com.signal.domain.auth.model.User;
+import com.signal.domain.post.dto.request.PostRequest;
 import com.signal.domain.post.model.enums.Category;
 import com.signal.global.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -56,4 +57,18 @@ public class Post extends BaseEntity {
     private LocalDateTime modifiedAt;
 
     private LocalDateTime deletedAt;
+
+    public static Post toEntity(PostRequest postRequest, User user) {
+        return Post.builder()
+            .user(user)
+            .title(postRequest.getTitle())
+            .contents(postRequest.getContents())
+            .viewCount(0L)
+            .category(postRequest.getCategory())
+            .likesCount(0L)
+            .commentCount(0L)
+            .createdAt(LocalDateTime.now())
+            .build()
+            ;
+    }
 }
