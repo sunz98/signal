@@ -7,6 +7,7 @@ import com.signal.domain.post.dto.request.CompletionRequestDto;
 import com.signal.global.config.ChatGPTConfig;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.processing.Completion;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,7 +107,6 @@ public class ChatGPTServiceImpl implements ChatGPTService {
     }
 
 
-
     @Override
     public Map<String,Object> prompt(CompletionRequestDto completionRequestDto){
         log.debug("[+] 프롬프트를 수행합니다");
@@ -119,10 +119,11 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         ObjectMapper om = new ObjectMapper();
 
         //properties의 model을 가져와서 객체를 추가
-        completionRequestDto = CompletionRequestDto.toDto(model, completionRequestDto.getPrompt(), 0.8f);
+        CompletionRequestDto completionRequestDtoResponse = CompletionRequestDto.toDto(model,
+            completionRequestDto.getMessages().get(0).getContent(), 0.8f);
 
         try { //Object -> String 직렬화를 구성
-            requestBody =om.writeValueAsString(completionRequestDto);
+            requestBody =om.writeValueAsString(completionRequestDtoResponse);
         }catch (JsonProcessingException e){
             throw new RuntimeException(e);
         }
@@ -131,7 +132,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         HttpEntity<String> requestEntity = new HttpEntity(requestBody, headers);
         ResponseEntity<String> response =chatGPTConfig.restTemplate()
             .exchange(
-                "https://api.openai.com/v1/completions",
+                "https://api.openai.com/v1/chat/completions",
                 HttpMethod.POST,
                 requestEntity,
                 String.class
