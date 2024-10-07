@@ -12,15 +12,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FilterResponse {
 
-    private boolean isValid;
+    private boolean isFiltered;
     private List<String> invalidSentences;
-    private String message;
 
-    public static FilterResponse toDto(boolean isValid, List<String> invalidSentences, String message) {
+    public static FilterResponse toDto(boolean isFiltered, List<String> invalidSentences) {
         return FilterResponse.builder()
-            .isValid(isValid)
+            .isFiltered(isFiltered)
             .invalidSentences(invalidSentences)
-            .message(message)
             .build()
             ;
     }

@@ -76,8 +76,11 @@ public class PostService {
 
         FilterResponse filterResponse = filterChatGPT(postRequest.getTitle() + " " + postRequest.getContents());
 
-        if(!filterResponse.isValid()) {
-            return "Denied: " + filterResponse.getMessage();
+        log.info("isFiltered: {}", filterResponse.isFiltered());
+
+        if(filterResponse.isFiltered()) {
+            String invalidSentences = String.join("/ ", filterResponse.getInvalidSentences());
+            return "Denied: " + invalidSentences;
         }
 
         Post newPost = Post.toEntity(postRequest, user);
@@ -91,11 +94,10 @@ public class PostService {
         CompletionRequestDto completionRequestDto = CompletionRequestDto.toDto(prompt);
         Map<String, Object> result = chatGPTService.prompt(completionRequestDto);
 
-        boolean isValid = true;
         List<String> invalidSentences = new ArrayList<>();
-        String filteredText = "";
+        String responseText = "";
 
-        log.debug("ChatGPT Result: {}", result);
+        log.info("ChatGPT Result: {}", result);
 
         // 답변에 무조건 choices가 포함됨
         if (result.containsKey("choices")) {
@@ -104,14 +106,27 @@ public class PostService {
             Map<String, Object> firstChoice = (Map<String, Object>) choices.get(0);
             Map<String, Object> message = (Map<String, Object>) firstChoice.get("message");
 
-            filteredText = (String) message.get("content");
-            invalidSentences = Arrays.asList(filteredText.split("\\."));
+            responseText = (String) message.get("content");
+
+            // isFiltered와 invalidSentences 추출
+            String[] lines = responseText.split("\n");
+            boolean isFiltered = false;
+
+            for (String line : lines) {
+                if (line.startsWith("isFiltered :")) {
+                    // 정확한 문자열 비교로 수정
+                    isFiltered = line.trim().equals("isFiltered : True");
+                } else if (line.startsWith("InvalidSentences :")) {
+                    String sentences = line.substring(line.indexOf(":") + 1).trim();
+                    if (!sentences.equals("[]")) { // 빈 리스트가 아닐 경우
+                        invalidSentences = Arrays.asList(sentences.replaceAll("[\\[\\]\"]", "").split(","));
+                    }
+                }
+            }
+
+            return FilterResponse.toDto(isFiltered, invalidSentences);
         }
 
-        // 문제가 있는 문장이 있을 경우,유효하지 않음으로 설정
-        isValid = invalidSentences.isEmpty();
-
-
-        return FilterResponse.toDto(isValid, invalidSentences, "Valid");
+        return FilterResponse.toDto(false, invalidSentences);
     }
 }

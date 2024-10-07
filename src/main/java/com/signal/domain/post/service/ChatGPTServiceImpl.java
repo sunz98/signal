@@ -120,7 +120,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
         //properties의 model을 가져와서 객체를 추가
         CompletionRequestDto completionRequestDtoResponse = CompletionRequestDto.toDto(model,
-            completionRequestDto.getMessages().get(0).getContent(), 0.8f);
+            completionRequestDto.getMessages().get(0).getContent(), 0.1f);
 
         try { //Object -> String 직렬화를 구성
             requestBody =om.writeValueAsString(completionRequestDtoResponse);

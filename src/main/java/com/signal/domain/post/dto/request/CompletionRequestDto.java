@@ -18,7 +18,7 @@ public class CompletionRequestDto {
     public static CompletionRequestDto toDto(String model, String prompt, float temperature) {
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("system", "You are a helpful assistant."));
-        messages.add(new Message("user", "다음 텍스트에서 누구인지 유추가 가능한 개인정보가 포함된 문장을 그대로 아래 양식에 따라서 대답해줘. isFiltered에는 True, False만 들어가고, InvalidSentences에는 문장들을 List로 묶어서 보내줘. \n\n isFiltered :  \n InvalidSentences : " + prompt));
+        messages.add(new Message("user", "다음 텍스트에서 이름(부분적으로 가려진 이름 포함)과 같은 개인정보가 감지되면, 해당 문장에서 생년월일(예: 1990-01-01), 소속(예: 단국대학교, 삼성전자), 주소(예: 서울특별시 강남구 123로)와 같은 추가적인 개인정보도 함께 필터링해줘. 이름이 부분적으로 가려졌더라도(예: 강x민) 이를 이름으로 간주하고 필터링해. 이름이 감지된 문장은 필터링이 필요해. isFiltered에는 문제가 있는 문장이 있다면 True, 없다면 False만 들어가고, InvalidSentences에는 문장들을 List로 묶어서 보내줘. \n\n isFiltered :  \n InvalidSentences : " + prompt));
 
         return CompletionRequestDto.builder()
             .model(model)
