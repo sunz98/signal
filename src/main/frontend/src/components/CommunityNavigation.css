@@ -1,0 +1,112 @@
+/* 네비게이션 전체 스타일 */
+/* 네비게이션 전체 스타일 */
+.community-navigation {
+  width: 260px;
+  height: 900px;
+  background-color: white;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  border-right: 2px solid #707070;
+}
+
+  
+  /* 카테고리 헤더 스타일 */
+  .category-header {
+    font-size: 20px;
+    color: #007bff;
+    font-weight: bold;
+    padding: 10px 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .category-header:hover {
+    color: #004c9c;
+  }
+  
+  /* 카테고리 목록 (펼쳐질 때) */
+  .category-list {
+    list-style-type: none;
+    padding-left: 10px;
+    margin-top: 10px;
+  }
+  
+  .category-list li {
+    margin: 15px 0;
+  }
+  
+  .category-list li a {
+    display: inline-block;
+    width: 500px; /* 가로 500px 고정 */
+    height: 50px; /* 세로 50px 고정 */
+    line-height: 50px; /* 텍스트가 중앙에 위치하게 */
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    padding-left: 0px; /* 텍스트 시작 위치 */
+    border-radius: 5px;
+}
+
+  
+.category-list li a:hover {
+  background-color: #e9f5fc;
+  width: 250px;
+}
+  
+  .category-list li a.active {
+    width: 250px;
+    background-color: #e9f5fc; /* 선택된 상태에서 음영 유지 */
+    font-weight: bolder; /* 선택된 항목 강조 */
+    color: black; /* 선택된 항목의 텍스트 색상 */
+}
+  
+  /* 고민, 정보 헤더 위아래 여백 설정 */
+  .category {
+    margin-bottom: 20px;
+  }
+  
+  /* 고민 및 정보 섹션 구분선 */
+  .category-header {
+    border-bottom: 3px solid #007bff;
+  }
+  
+  /* 위쪽 화살표 */
+.arrow-up {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 10px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 7px solid #007bff; /* 화살표 색상 */
+}
+
+/* 아래쪽 화살표 */
+.arrow-down {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 10px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid #007bff; /* 화살표 색상 */
+}
+
+.blackLine{
+  border: 5px;
+  color: black;
+  width: 20px;
+}
+
+.community-navigation::after {
+  content: '';
+  position: absolute;
+  width: 230px; /* 선의 길이 */
+  margin-top: 20px;
+  height: 2px; /* 선의 두께 */
+  background-color: rgb(190, 190, 190); /* 선의 색상 */
+}

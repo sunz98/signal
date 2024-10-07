@@ -1,0 +1,103 @@
+.gomin-detail-page {
+    display: flex;
+    flex-direction: row;  /* 가로로 배치 */
+    padding: 20px;
+    width: 1700px;
+    margin: 0 auto;
+  }
+  
+  .gomin-content {
+    flex-grow: 1;
+    background-color: white;
+    padding-left: 40px;
+  }
+  
+  .hot-post {
+    background-color: #FFEBF8;
+    font-weight: bold;
+  }
+  
+  .post-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .post-list-table th, .post-list-table td {
+    padding: 15px;
+    border-bottom: 1px solid #d4d4d4;
+  }
+  
+  .post-list-table th {
+    background-color: white;
+    color: rgb(150, 150, 150);
+  }
+  
+  .post-list-table td {
+    color: #333;
+  }
+  
+  .post-list-table tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* 첫 번째 열(제목)은 왼쪽 정렬 */
+  .post-list-table th:first-child, 
+  .post-list-table td:first-child {
+    text-align: left;
+    width: 50%; /* 제목 칸 넓게 */
+  }
+  
+  /* 나머지 열(작성일시, 조회수, 좋아요)은 오른쪽 정렬 */
+  .post-list-table th:not(:first-child),
+  .post-list-table td:not(:first-child) {
+    text-align: right;
+    width: 20%; /* 작성일시 칸 좁게 */
+  }
+  
+  .pagination {
+    margin-top: 40px;
+    margin-left: 500px;
+  }
+  
+  .pagination button {
+    padding: 8px 12px;
+    font-size: 17px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    
+  }
+  
+  .pagination button.active {
+    background-color: #000000;
+    color: white;
+  }
+  
+  .pagination button:hover {
+    background-color: #bfbfbf;
+  }
+
+  .pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .write-post-button {
+    background-color: #FFEBF8;
+    color: black;
+    font-weight: bolder;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .write-post-button:hover {
+    background-color: #0056b3;
+  }
+  
+  

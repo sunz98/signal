@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,7 @@ public class PostController {
         return ResponseEntity.ok(PostDetailResponse);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @Operation(summary = "게시글 작성")
     @PostMapping("/user/post")
     public ResponseEntity<String> createPost(
