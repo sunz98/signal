@@ -55,19 +55,17 @@ const CommunityWriteForm = () => {
       case '40':
         return '_40S';
       case 'gomsin':
-        return '_GOMSIN';
+        return 'MILITARY';
       case 'CC':
-        return '_CC';
+        return 'CC';
       case 'office':
-        return '_OFFICE';
+        return 'OFFICE';
       case 'date-places':
-        return '_DATE_PLACES';
+        return 'DATE_LOCATION';
       case 'gifts':
-        return '_GIFTS';
+        return 'ANNIVERSARY_GIFT';
       case 'travel':
-        return '_TRAVEL';
-      default:
-        return '_UNKNOWN';
+        return 'TRAVEL_LOCATION';
     }
   };
 
