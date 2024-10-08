@@ -7,7 +7,7 @@ const CommunityWriteForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [invalidSentences, setInvalidSentences] = useState(null); // 문제 있는 문장을 저장할 상태
-  const [isFiltered, setIsFiltered] = useState(false); // 필터링 여부 상태
+  const [filtered, setfiltered] = useState(false); // 필터링 여부 상태
 
   const navigate = useNavigate();  //페이지 이동 훅
 
@@ -38,11 +38,11 @@ const CommunityWriteForm = () => {
       console.log("Result:", result);
   
       // ChatGPT 필터링 결과 처리
-      if (result.isFiltered !== undefined) { // isFiltered가 정의되어 있는지 확인
-        if (result.isFiltered) {
+      if (result.filtered !== undefined) { // isFiltered가 정의되어 있는지 확인
+        if (result.filtered) {
           console.log("필터링된 문장:", result.invalidSentences); // 문제가 있는 문장을 확인하는 로그
           setInvalidSentences(result.invalidSentences); // 문제가 있는 문장 저장
-          setIsFiltered(true); // 필터링 여부 true로 설정
+          setfiltered(true); // 필터링 여부 true로 설정
   
           return; // 필터링되었으므로 페이지 이동 막음
         } else {
@@ -118,13 +118,13 @@ const CommunityWriteForm = () => {
       </div>
 
       <textarea
-        className={`content-textarea ${isFiltered ? 'error-content' : ''}`} // 필터링된 경우 스타일 적용
+        className={`content-textarea ${filtered ? 'error-content' : ''}`} // 필터링된 경우 스타일 적용
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="내용"
       ></textarea>
 
-      {isFiltered && invalidSentences && (
+      {filtered && invalidSentences && (
         <div className="error-message">
           <p>다음 문장을 수정해주세요:</p>
           <p className="invalid-sentences">{invalidSentences}</p>
