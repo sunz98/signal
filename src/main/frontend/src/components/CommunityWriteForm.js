@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate 추가
+import { useNavigate } from 'react-router-dom';
 import './CommunityWriteForm.css';
 
 const CommunityWriteForm = () => {
-  const [category, setCategory] = useState('20대 고민');
+  const [category, setCategory] = useState('30');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [invalidSentences, setInvalidSentences] = useState(null); // 문제 있는 문장을 저장할 상태
+  const [isFiltered, setIsFiltered] = useState(false); // 필터링 여부 상태
 
-  const navigate = useNavigate(); // 페이지 이동을 위한 navigate 사용
+  const navigate = useNavigate();  //페이지 이동 훅
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-  
+    e.preventDefault(); //새로고침 방지
+
     const requestBody = {
       title: title,
       contents: content,
       category: mapCategoryToBackendFormat(category),
     };
-  
+
     try {
       const response = await fetch('http://localhost:8080/api/user/post', {
         method: 'POST',
@@ -27,16 +29,16 @@ const CommunityWriteForm = () => {
         },
         body: JSON.stringify(requestBody),
       });
-  
-      // API 요청 후 상태 확인
+
       const result = await response.json();
-      console.log(result); // 결과 출력
-  
-      if (response.ok) {
+
+      // ChatGPT 필터링 결과 처리
+      if (result.isFiltered) {
+        setInvalidSentences(result.invalidSentences); // 문제가 있는 문장 저장
+        setIsFiltered(true); // 필터링 여부 true로 설정
+      } else {
         console.log('게시글 작성 성공!');
         navigate(`/community/gomin/${category}`); // 작성 후 페이지 이동
-      } else {
-        console.error('게시글 작성 실패:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('서버와의 통신 중 오류 발생:', error);
@@ -66,6 +68,8 @@ const CommunityWriteForm = () => {
         return 'ANNIVERSARY_GIFT';
       case 'travel':
         return 'TRAVEL_LOCATION';
+      default:
+        return category;
     }
   };
 
@@ -99,12 +103,21 @@ const CommunityWriteForm = () => {
           placeholder="제목"
         />
       </div>
+
       <textarea
-        className="content-textarea"
+        className={`content-textarea ${isFiltered ? 'error-content' : ''}`} // 필터링된 경우 스타일 적용
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="내용"
       ></textarea>
+
+      {isFiltered && invalidSentences && (
+        <div className="error-message">
+          <p>다음 문장을 수정해주세요:</p>
+          <p className="invalid-sentences">{invalidSentences}</p>
+        </div>
+      )}
+
       <div className="form-footer">
         <button type="submit" className="submit-button">
           작성하기

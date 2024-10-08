@@ -62,7 +62,26 @@
     border-radius: 8px;
     cursor: pointer;
   }
+
+  /* CommunityWriteForm.css */
+.error-content {
+  border: 1px solid red;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.invalid-sentences {
+  color: red;
+  font-style: italic;
+}
+
   
   .submit-button:hover {
     background-color: rgb(255, 191, 191);
   }
+
+
