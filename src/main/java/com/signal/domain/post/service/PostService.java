@@ -1,6 +1,8 @@
 package com.signal.domain.post.service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.signal.domain.auth.model.User;
 import com.signal.domain.auth.repository.UserRepository;
@@ -111,14 +113,14 @@ public class PostService {
 
                 boolean isFiltered = (boolean) responseText.get("isFiltered");
 
-                log.info("reponseText: {}", isFiltered);
-
                 if (isFiltered) {
                     invalidSentences = (List<String>) responseText.get("InvalidSentences");
                 }
 
                 return FilterResponse.toDto(isFiltered, invalidSentences);
-            } catch (Exception e) {
+            } catch (JsonMappingException e) {
+                log.info(e.getMessage());
+            } catch (JsonProcessingException e) {
                 log.info(e.getMessage());
             }
 
