@@ -1,5 +1,6 @@
 package com.signal.domain.post.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.signal.domain.auth.model.User;
 import com.signal.domain.auth.repository.UserRepository;
@@ -15,6 +16,7 @@ import com.signal.domain.post.repository.PostRepository;
 import com.signal.global.dto.PagedDto;
 import com.signal.global.exception.errorCode.ErrorCode;
 import com.signal.global.exception.handler.InvalidValueException;
+import io.swagger.v3.core.util.Json;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +70,7 @@ public class PostService {
         return PostDetailResponse.toDto(post);
     }
 
-    public String createPost(PostRequest postRequest, Long userId) {
+    public FilterResponse createPost(PostRequest postRequest, Long userId){
 
         // userId  검증필요, 임시 User 생성
         // consultant가 아닌지도 확인 필요 추후 수정해야 함.
@@ -76,17 +78,12 @@ public class PostService {
 
         FilterResponse filterResponse = filterChatGPT(postRequest.getTitle() + " " + postRequest.getContents());
 
-        log.info("isFiltered: {}", filterResponse.isFiltered());
-
-        if(filterResponse.isFiltered()) {
-            String invalidSentences = String.join("/ ", filterResponse.getInvalidSentences());
-            return "Denied: " + invalidSentences;
+        if(!filterResponse.isFiltered()) {
+            Post newPost = Post.toEntity(postRequest, user);
+            postRepository.save(newPost);
         }
 
-        Post newPost = Post.toEntity(postRequest, user);
-        postRepository.save(newPost);
-
-        return "Post created";
+        return filterResponse;
     }
 
     public FilterResponse filterChatGPT(String prompt) {
@@ -95,36 +92,36 @@ public class PostService {
         Map<String, Object> result = chatGPTService.prompt(completionRequestDto);
 
         List<String> invalidSentences = new ArrayList<>();
-        String responseText = "";
+        ObjectMapper objectMapper = new ObjectMapper();
 
         log.info("ChatGPT Result: {}", result);
 
         // 답변에 무조건 choices가 포함됨
         if (result.containsKey("choices")) {
             List<Map<String, Object>> choices = (List<Map<String, Object>>) result.get("choices");
-
             Map<String, Object> firstChoice = (Map<String, Object>) choices.get(0);
-            Map<String, Object> message = (Map<String, Object>) firstChoice.get("message");
 
-            responseText = (String) message.get("content");
+            Map<String, String> message = (Map<String, String>) firstChoice.get("message");
 
-            // isFiltered와 invalidSentences 추출
-            String[] lines = responseText.split("\n");
-            boolean isFiltered = false;
+            try {
+                String content = message.get("content");
+                content = content.substring(content.indexOf("{")).trim();
 
-            for (String line : lines) {
-                if (line.startsWith("isFiltered :")) {
-                    // 정확한 문자열 비교로 수정
-                    isFiltered = line.trim().equals("isFiltered : True");
-                } else if (line.startsWith("InvalidSentences :")) {
-                    String sentences = line.substring(line.indexOf(":") + 1).trim();
-                    if (!sentences.equals("[]")) { // 빈 리스트가 아닐 경우
-                        invalidSentences = Arrays.asList(sentences.replaceAll("[\\[\\]\"]", "").split(","));
-                    }
+                Map<String, Object> responseText = objectMapper.readValue(content, Map.class);
+
+                boolean isFiltered = (boolean) responseText.get("isFiltered");
+
+                log.info("reponseText: {}", isFiltered);
+
+                if (isFiltered) {
+                    invalidSentences = (List<String>) responseText.get("InvalidSentences");
                 }
+
+                return FilterResponse.toDto(isFiltered, invalidSentences);
+            } catch (Exception e) {
+                log.info(e.getMessage());
             }
 
-            return FilterResponse.toDto(isFiltered, invalidSentences);
         }
 
         return FilterResponse.toDto(false, invalidSentences);
