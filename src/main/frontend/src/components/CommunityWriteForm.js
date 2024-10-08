@@ -12,14 +12,14 @@ const CommunityWriteForm = () => {
   const navigate = useNavigate();  //페이지 이동 훅
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); //새로고침 방지
-
+    e.preventDefault(); // 새로고침 방지
+  
     const requestBody = {
       title: title,
       contents: content,
       category: mapCategoryToBackendFormat(category),
     };
-
+  
     try {
       const response = await fetch('http://localhost:8080/api/user/post', {
         method: 'POST',
@@ -29,21 +29,34 @@ const CommunityWriteForm = () => {
         },
         body: JSON.stringify(requestBody),
       });
-
+  
+      // 응답이 제대로 오는지 확인하기 위한 로그 출력
+      console.log("Response status:", response.status);
       const result = await response.json();
-
+  
+      // 응답 데이터를 확인하기 위한 로그 출력
+      console.log("Result:", result);
+  
       // ChatGPT 필터링 결과 처리
-      if (result.isFiltered) {
-        setInvalidSentences(result.invalidSentences); // 문제가 있는 문장 저장
-        setIsFiltered(true); // 필터링 여부 true로 설정
+      if (result.isFiltered !== undefined) { // isFiltered가 정의되어 있는지 확인
+        if (result.isFiltered) {
+          console.log("필터링된 문장:", result.invalidSentences); // 문제가 있는 문장을 확인하는 로그
+          setInvalidSentences(result.invalidSentences); // 문제가 있는 문장 저장
+          setIsFiltered(true); // 필터링 여부 true로 설정
+  
+          return; // 필터링되었으므로 페이지 이동 막음
+        } else {
+          console.log('게시글 작성 성공!'); // 게시글 작성 성공 메시지
+          navigate(`/community/gomin/${category}`); // 작성 후 페이지 이동
+        }
       } else {
-        console.log('게시글 작성 성공!');
-        navigate(`/community/gomin/${category}`); // 작성 후 페이지 이동
+        console.error('isFiltered 값이 응답에 없습니다.');
       }
     } catch (error) {
       console.error('서버와의 통신 중 오류 발생:', error);
     }
   };
+  
 
   // 카테고리 값을 백엔드 API에서 받을 수 있는 형식으로 변환
   const mapCategoryToBackendFormat = (category) => {
