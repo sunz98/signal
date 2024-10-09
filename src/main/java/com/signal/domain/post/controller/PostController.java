@@ -1,6 +1,7 @@
 package com.signal.domain.post.controller;
 
 import com.signal.domain.post.dto.request.PostRequest;
+import com.signal.domain.post.dto.response.FilterResponse;
 import com.signal.domain.post.dto.response.PostDetailResponse;
 import com.signal.domain.post.dto.response.PostResponse;
 import com.signal.domain.post.dto.response.SearchResponse;
@@ -50,7 +51,7 @@ public class PostController {
 
     @Operation(summary = "게시글 작성")
     @PostMapping("/user/post")
-    public ResponseEntity<String> createPost(
+    public ResponseEntity<FilterResponse> createPost(
         @Valid @RequestBody PostRequest postReqeust
 //        @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
