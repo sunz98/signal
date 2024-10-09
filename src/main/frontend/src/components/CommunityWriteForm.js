@@ -122,14 +122,19 @@ const CommunityWriteForm = () => {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="내용"
+        spellCheck="false"
       ></textarea>
 
-      {filtered && invalidSentences && (
-        <div className="error-message">
-          <p>다음 문장을 수정해주세요:</p>
-          <p className="invalid-sentences">{invalidSentences}</p>
-        </div>
-      )}
+{filtered && invalidSentences && (
+  <div className="error-message">
+    <p>다음 문장을 수정해주세요:</p>
+    <div className="invalid-sentences">
+      {invalidSentences.map((sentence, index) => (
+        <p key={index}>{sentence}</p>  // 문장마다 줄바꿈
+      ))}
+    </div>
+  </div>
+)}
 
       <div className="form-footer">
         <button type="submit" className="submit-button">

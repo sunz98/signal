@@ -11,49 +11,85 @@ const mockData = {
     totalCount: 14,
     hotPost: {
       id: 1,
-      title: "HOT 첫 번째 게시글오롤ㄹ로로로",
+      title: "데이트 비용과 관련해서 제가 잘못한 건가요..??",
       createdAt: "2024-09-28",
       category: "20s",
       viewCount: 145,
       likeCount: 24,
-      commentCount: 5
+      commentCount: 13
     },
     posts: [
       {
         id: 1,
-        title: "데이트 비용 고민",
+        title: "취업이 다가오니까 여러가지 문제가 생겨요",
         createdAt: "2024-09-28",
         category: "20s",
-        viewCount: 145,
-        likeCount: 24,
+        viewCount: 45,
+        likeCount: 4,
         commentCount: 5
       },
       {
         id: 2,
-        title: "취준생 남자친구 직장인 여자친구",
+        title: "롱디 선배님들, 조언을 좀 구하고 싶습니다!",
         createdAt: "2024-09-29",
         category: "20s",
-        viewCount: 123,
-        likeCount: 15,
+        viewCount: 13,
+        likeCount: 5,
         commentCount: 2
       },
       {
         id: 3,
-        title: "여자친구가 두통이 심해요",
-        createdAt: "2023-09-29",
+        title: "여자친구와 저의 성향이 너무 달라요...",
+        createdAt: "2024-09-29",
         category: "20s",
-        viewCount: 1111,
-        likeCount: 122,
+        viewCount: 11,
+        likeCount: 2,
         commentCount: 3
       },
       {
         id: 4,
-        title: "메롱이다 아주",
-        createdAt: "2023-09-29",
+        title: "안녕하세요 고민있습니다.",
+        createdAt: "2024-10-01",
         category: "20s",
-        viewCount: 123,
-        likeCount: 122,
+        viewCount: 13,
+        likeCount: 5,
         commentCount: 3
+      },
+      {
+        id: 5,
+        title: "비밀연애가 진짜 힘드네요..",
+        createdAt: "2024-10-03",
+        category: "20s",
+        viewCount: 23,
+        likeCount: 1,
+        commentCount: 3
+      },
+      {
+        id: 6,
+        title: "남자친구가 게임을 너무 많이 해요",
+        createdAt: "2024-10-07",
+        category: "20s",
+        viewCount: 3,
+        likeCount: 1,
+        commentCount: 1
+      },
+      {
+        id: 7,
+        title: "다른 대학교 커플 어떻게 만나시나요?",
+        createdAt: "2024-10-07",
+        category: "20s",
+        viewCount: 13,
+        likeCount: 4,
+        commentCount: 2
+      },
+      {
+        id: 8,
+        title: "남자친구를 보기 너무 힘들어요ㅠㅠ",
+        createdAt: "2024-10-09",
+        category: "20s",
+        viewCount: 3,
+        likeCount: 0,
+        commentCount: 0
       }
     ]
   }
