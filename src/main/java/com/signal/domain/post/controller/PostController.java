@@ -43,7 +43,7 @@ public class PostController {
     }
 
     @Operation(summary = "게시판 단일 조회")
-    @GetMapping("/common/post")
+    @GetMapping("/common/post/{postId}")
     public ResponseEntity<PostDetailResponse> getPostById(@PathVariable Long postId) {
         PostDetailResponse PostDetailResponse = postService.getPostById(postId);
         return ResponseEntity.ok(PostDetailResponse);

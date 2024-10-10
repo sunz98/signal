@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "chatGPT", description = "GPT 연결 / 사용")
 public class ChatGPTController {
 
-    private final ChatGPTService chatGPTService;
+	private final ChatGPTService chatGPTService;
 
 //    @Operation(summary = "사용 가능한 모델 리스트 조회")
 //    @GetMapping("/modelList")
