@@ -4,8 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.signal.domain.post.dto.request.CompletionRequestDto;
+import com.signal.domain.post.dto.response.FilterResponse;
 import com.signal.global.config.ChatGPTConfig;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.processing.Completion;
 import lombok.RequiredArgsConstructor;
@@ -147,4 +151,50 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
         return result;
     }
+ // filterChatGPT 메서드 추가
+    @Override
+    public FilterResponse filterChatGPT(String prompt) {
+        // ChatGPT API 호출
+        CompletionRequestDto completionRequestDto = CompletionRequestDto.toDto(prompt);
+        Map<String, Object> result = this.prompt(completionRequestDto);
+
+        // ChatGPT 응답 로그 출력
+        log.info("ChatGPT Response: {}", result);
+
+        List<String> invalidSentences = new ArrayList<>();
+        boolean isFiltered = false;
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (result.containsKey("choices")) {
+            List<Map<String, Object>> choices = (List<Map<String, Object>>) result.get("choices");
+            Map<String, Object> firstChoice = (Map<String, Object>) choices.get(0);
+            Map<String, String> message = (Map<String, String>) firstChoice.get("message");
+
+            try {
+                String content = message.get("content");
+
+                int index = content.indexOf("{");
+                if (index != -1) {
+                    content = content.substring(index).trim();
+                    Map<String, Object> responseText = objectMapper.readValue(content, Map.class);
+
+                    // ChatGPT 응답에서 필터링 여부 및 부적절한 문장 추출
+                    isFiltered = (boolean) responseText.get("isFiltered");
+                    if (isFiltered) {
+                        invalidSentences = (List<String>) responseText.get("InvalidSentences");
+                    }
+                } else {
+                    log.error("Expected '{' character not found in the content.");
+                }
+
+            } catch (JsonProcessingException e) {
+                log.error("Error parsing ChatGPT response: {}", e.getMessage());
+            }
+        }
+
+        // 필터링 결과 반환
+        return FilterResponse.toDto(isFiltered, invalidSentences);
+    }
+
+
 }
