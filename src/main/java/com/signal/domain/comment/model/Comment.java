@@ -47,4 +47,23 @@ public class Comment extends BaseEntity {
     private LocalDateTime modifiedAt;
 
     private LocalDateTime deletedAt;
+    
+    public Comment(Post post,String contents) {
+    	this.post=post;
+    	this.contents=contents;
+    }
+
+	public void updateCotents(String newContents){
+		if(newContents==null ||newContents.isBlank()) {
+			throw new IllegalArgumentException("댓글내용이 비어 있습니다.");
+		}
+		this.contents=newContents;
+		
+	}
+	public Comment(Post post, User user, String contents) {
+	    this.post = post;
+	    this.user = user;
+	    this.contents = contents;
+	}
+
 }
