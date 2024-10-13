@@ -71,4 +71,10 @@ public class Post extends BaseEntity {
             .build()
             ;
     }
+
+    public void update(PostRequest postRequest) {
+        this.title = postRequest.getTitle();
+        this.contents = postRequest.getContents();
+        this.category = postRequest.getCategory();
+    }
 }

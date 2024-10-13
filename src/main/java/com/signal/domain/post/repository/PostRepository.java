@@ -2,6 +2,8 @@ package com.signal.domain.post.repository;
 
 import com.signal.domain.post.model.Post;
 import com.signal.domain.post.model.enums.Category;
+import com.signal.global.exception.errorCode.ErrorCode;
+import com.signal.global.exception.handler.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -23,4 +25,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
        @Param("category")Category category,
        Pageable pageable
    );
+
+   @Query("SELECT p.id FROM Post p WHERE p.id = :postId AND p.user.id = :userId")
+   Long findPostIdByIdAndUserId(Long postId, Long userId);
+
+   default boolean existsByIdAndUserId(Long postId, Long userId) {
+      if (findPostIdByIdAndUserId(postId, userId) == null) throw new EntityNotFoundException(
+          ErrorCode.NOT_FOUND);
+      return true;
+   }
+
+   default Post findPostById(Long postId) {
+      return findById(postId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND));
+   }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     //Common
     BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), "400", "요청 파라미터나, 요청 바디의 값을 다시 확인하세요"),
+    NOT_FOUND(HttpStatus.NOT_FOUND.value(), "404", "잘못된 요청입니다."),
 
 
     //Authentication Errors

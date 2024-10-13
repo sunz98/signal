@@ -72,6 +72,7 @@ public class PostService {
         return PostDetailResponse.toDto(post);
     }
 
+    @Transactional
     public FilterResponse createPost(PostRequest postRequest, Long userId){
 
         // userId  검증필요, 임시 User 생성
@@ -86,6 +87,30 @@ public class PostService {
         }
 
         return filterResponse;
+    }
+
+    @Transactional
+    public FilterResponse updatePost(
+        PostRequest postRequest,
+        Long postId,
+        Long userId
+    ) {
+        postRepository.existsByIdAndUserId(postId, userId);
+        Post post = postRepository.findPostById(postId);
+
+        FilterResponse filterResponse = filterChatGPT(postRequest.getTitle() + " " + postRequest.getContents());
+
+        if(!filterResponse.isFiltered()) {
+            post.update(postRequest);
+        }
+
+        return filterResponse;
+    }
+
+    public void deletePost(Long postId, Long userId) {
+        postRepository.existsByIdAndUserId(postId, userId);
+
+        postRepository.deleteById(postId);
     }
 
     public FilterResponse filterChatGPT(String prompt) {
