@@ -6,20 +6,21 @@ const CommunityWriteForm = () => {
   const [category, setCategory] = useState('30');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [invalidSentences, setInvalidSentences] = useState(null); // 문제 있는 문장을 저장할 상태
-  const [filtered, setfiltered] = useState(false); // 필터링 여부 상태
+  const [invalidSentences, setInvalidSentences] = useState(null);
+  const [filtered, setfiltered] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);  // 게시글 작성 완료 상태 추가
 
   const navigate = useNavigate();  //페이지 이동 훅
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // 새로고침 방지
-  
+
     const requestBody = {
       title: title,
       contents: content,
       category: mapCategoryToBackendFormat(category),
     };
-  
+
     try {
       const response = await fetch('http://localhost:8080/api/user/post', {
         method: 'POST',
@@ -29,36 +30,40 @@ const CommunityWriteForm = () => {
         },
         body: JSON.stringify(requestBody),
       });
-  
-      // 응답이 제대로 오는지 확인하기 위한 로그 출력
+
       console.log("Response status:", response.status);
       const result = await response.json();
-  
-      // 응답 데이터를 확인하기 위한 로그 출력
+
       console.log("Result:", result);
-  
+
       // ChatGPT 필터링 결과 처리
-      if (result.filtered !== undefined) { // isFiltered가 정의되어 있는지 확인
+      if (result.filtered !== undefined) {
         if (result.filtered) {
-          console.log("필터링된 문장:", result.invalidSentences); // 문제가 있는 문장을 확인하는 로그
-          setInvalidSentences(result.invalidSentences); // 문제가 있는 문장 저장
-          setfiltered(true); // 필터링 여부 true로 설정
-  
+          console.log("필터링된 문장:", result.invalidSentences);
+          setInvalidSentences(result.invalidSentences);
+          setfiltered(true);
+          setIsSubmitted(false); // 필터링 시 성공 메시지 비활성화
           return; // 필터링되었으므로 페이지 이동 막음
         } else {
-          console.log('게시글 작성 성공!'); // 게시글 작성 성공 메시지
-          navigate(`/community/gomin/${category}`); // 작성 후 페이지 이동
+          console.log('게시글 작성 성공!');
+          setIsSubmitted(true);  // 성공 시 상태 true로 설정
+          setfiltered(false);    // 필터링이 없으므로 false로 설정
+          setInvalidSentences(null);
+          
+          // 게시글 작성 후 바로 이동 대신 성공 메시지를 띄우고 일정 시간 후 페이지 이동
+          setTimeout(() => {
+            navigate(`/community/gomin/${category}`);
+          }, 2000);  // 2초 후 페이지 이동
         }
       } else {
         console.error('isFiltered 값이 응답에 없습니다.');
+        setIsSubmitted(false);
       }
     } catch (error) {
       console.error('서버와의 통신 중 오류 발생:', error);
     }
   };
-  
 
-  // 카테고리 값을 백엔드 API에서 받을 수 있는 형식으로 변환
   const mapCategoryToBackendFormat = (category) => {
     switch (category) {
       case '10':
@@ -118,23 +123,29 @@ const CommunityWriteForm = () => {
       </div>
 
       <textarea
-        className={`content-textarea ${filtered ? 'error-content' : ''}`} // 필터링된 경우 스타일 적용
+        className={`content-textarea ${filtered ? 'error-content' : isSubmitted ? 'success-content' : ''}`}  // 성공 시 초록색 테두리
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="내용"
         spellCheck="false"
       ></textarea>
 
-{filtered && invalidSentences && (
-  <div className="error-message">
-    <p>다음 문장을 수정해주세요:</p>
-    <div className="invalid-sentences">
-      {invalidSentences.map((sentence, index) => (
-        <p key={index}>{sentence}</p>  // 문장마다 줄바꿈
-      ))}
-    </div>
-  </div>
-)}
+      {filtered && invalidSentences && (
+        <div className="error-message">
+          <p>다음 문장을 수정해주세요:</p>
+          <div className="invalid-sentences">
+            {invalidSentences.map((sentence, index) => (
+              <p key={index}>{sentence}</p>  // 줄바꿈
+            ))}
+          </div>
+        </div>
+      )}
+
+      {isSubmitted && !filtered && (
+        <div className="success-message">
+          <p>게시글 작성이 완료되었습니다!</p>
+        </div>
+      )}
 
       <div className="form-footer">
         <button type="submit" className="submit-button">

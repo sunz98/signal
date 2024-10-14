@@ -98,4 +98,12 @@
     background-color: rgb(255, 191, 191);
   }
 
-
+  .success-content {
+    border: 2px solid green;
+  }
+  
+  .success-message {
+    color: green;
+    margin-top: 10px;
+  }
+  
