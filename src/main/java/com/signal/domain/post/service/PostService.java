@@ -131,8 +131,18 @@ public class PostService {
             Map<String, String> message = (Map<String, String>) firstChoice.get("message");
 
             try {
-                String content = message.get("content");
-                content = content.substring(content.indexOf("{")).trim();
+
+            	String content = message.get("content");
+            	int beginIndex = content.indexOf("{");
+
+            	// 인덱스 유효성 검사 추가
+            	if (beginIndex == -1) {
+            	    log.warn("ChatGPT 응답에 JSON 형식이 포함되지 않았습니다: {}", content);
+            	    return FilterResponse.toDto(false, invalidSentences);
+            	}
+
+            	content = content.substring(beginIndex).trim();
+
 
                 Map<String, Object> responseText = objectMapper.readValue(content, Map.class);
 
