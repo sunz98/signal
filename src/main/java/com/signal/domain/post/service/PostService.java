@@ -30,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,10 +48,10 @@ public class PostService {
     public PagedDto<SearchResponse> getPosts(
         Category category, int size, int page
     ) {
-        Post hotpost = postRepository.findTopByOrderByViewCountDesc(category);
+        Post hotpost = postRepository.findTopByCategoryOrderByViewCountDesc(category);
         PostResponse hotpostResponse = PostResponse.toDto(hotpost);
 
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Direction.DESC, "createdAt"));
 
         Page<Post> posts = postRepository.findByCategory(category, pageRequest);
 
@@ -59,16 +61,19 @@ public class PostService {
             ).collect(Collectors.toList());
 
         int totalCount = (int) posts.getTotalElements();
+        int totalPages = (totalCount + size - 1) / size;
 
         SearchResponse searchResponse = SearchResponse.toDto(totalCount, hotpostResponse, postsResponse);
 
-        return PagedDto.toDTO(page, size, posts.getTotalPages(), List.of(searchResponse));
+        return PagedDto.toDTO(page, size, totalPages, List.of(searchResponse));
     }
 
     @Transactional
     public PostDetailResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
             .orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
+
+        postRepository.incrementViewCountById(id);
 
         return PostDetailResponse.toDto(post);
     }
@@ -130,6 +135,8 @@ public class PostService {
             Map<String, Object> firstChoice = (Map<String, Object>) choices.get(0);
 
             Map<String, String> message = (Map<String, String>) firstChoice.get("message");
+
+            log.info("message: {}", message);
 
             try {
 
