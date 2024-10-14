@@ -1,0 +1,15 @@
+/* HeroSlider.css */
+.hero-slider {
+    display: flex;
+    overflow-x: auto;
+    width: 1920px;
+    height: 600px;
+  }
+  .hero-slider .slide {
+    min-width: 1920px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

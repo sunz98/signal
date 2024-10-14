@@ -54,36 +54,36 @@
     text-align: right;
     width: 20%; /* 작성일시 칸 좁게 */
   }
-  
-  .pagination {
-    margin-top: 40px;
-    margin-left: 500px;
-  }
-  
-  .pagination button {
-    padding: 8px 12px;
-    font-size: 17px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 8px;
-    background-color: white;
-    cursor: pointer;
-    
-  }
-  
-  .pagination button.active {
-    background-color: #000000;
-    color: white;
-  }
-  
-  .pagination button:hover {
-    background-color: #bfbfbf;
-  }
 
   .pagination-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    text-align: center;
+    }
+  
+  .gomin-detail-page .pagination-container button {
+    all: unset; /* 모든 기본 스타일 초기화 */
+    appearance: none; /* 브라우저 기본 appearance 제거 */
+  
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 0 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    box-sizing: border-box; /* 요소의 크기를 올바르게 계산 */
+  }
+  
+  .gomin-detail-page .pagination-container button.active {
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+    border: #000000;
+  }
+  
+  .gomin-detail-page .pagination-container button:hover {
+    background-color: #0056b3;
+    color: white;
   }
   
   .write-post-button {
@@ -94,10 +94,19 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 20px;
   }
   
   .write-post-button:hover {
-    background-color: #0056b3;
+    background-color: #d4206e;
+    color: white;
   }
+  
+  .write-post-container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    margin-top: 20px;
+  }
+  
   
   

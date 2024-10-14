@@ -13,6 +13,7 @@ const CommunityRoutes = () => {
       <Route path="/community/gomin/:category" element={<GominDetailPage />} />
       <Route path="/community/info/:category" element={<InfoDetailPage />} />
       <Route path="/community/write" element={<WritePage />} />
+      <Route path="/post/:postId" element={<PostDetailPage />} />
     </Routes>
   );
 };

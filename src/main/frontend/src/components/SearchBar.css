@@ -1,0 +1,14 @@
+/* SearchBar.css */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .search-bar input {
+    width: 400px;
+    padding: 10px;
+  }
+  .search-bar button {
+    padding: 10px;
+  }
+  
