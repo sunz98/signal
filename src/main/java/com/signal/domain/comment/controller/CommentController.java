@@ -2,6 +2,7 @@ package com.signal.domain.comment.controller;
 
 
 import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,7 +56,7 @@ public class CommentController {
 	}
 	
 	@Operation(summary="댓글 조회")
-	@GetMapping("/api/common/post/{postId}/comment")
+	@GetMapping("/common/post/{postId}/comment")
 	public ResponseEntity<Page<Comment>> getCommentByPostId(
 			@PathVariable Long postId,
 			Pageable pageable
