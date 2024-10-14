@@ -72,6 +72,8 @@ public class PostService {
         Post post = postRepository.findById(id)
             .orElseThrow(() -> new InvalidValueException(ErrorCode.POST_NOT_FOUND));
 
+        postRepository.incrementViewCountById(id);
+
         return PostDetailResponse.toDto(post);
     }
 
