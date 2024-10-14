@@ -22,11 +22,11 @@ public class PagedDto<T> {
     private List<T> contents;
 
     public static <T> PagedDto<T> toDTO(
-        int currentPage, int size, int totalCount, List<T> contents) {
+        int currentPage, int size, int totalPages, List<T> contents) {
         return PagedDto.<T>builder()
             .currentPage(currentPage)
             .pageSize(size)
-            .totalPages(totalCount)
+            .totalPages(totalPages)
             .contents(contents)
             .build();
     }

@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
 
-   @Query("SELECT p FROM Post p WHERE p.deletedAt IS NULL AND p.category = :category ORDER BY p.viewCount DESC")
-   Post findTopByOrderByViewCountDesc(
+   @Query("SELECT p FROM Post p WHERE p.deletedAt IS NULL AND p.category = :category ORDER BY p.viewCount DESC, p.createdAt DESC LIMIT 1")
+   Post findTopByCategoryOrderByViewCountDesc(
        @Param("category") Category category
    );
 
