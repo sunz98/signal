@@ -21,8 +21,8 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
-@Table(name = "post")
 @Getter
+@Table(name = "post")
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder

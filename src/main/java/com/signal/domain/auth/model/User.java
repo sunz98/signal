@@ -1,5 +1,8 @@
 package com.signal.domain.auth.model;
 
+import com.signal.domain.auth.dto.request.UserPasswordResetRequest;
+import com.signal.domain.auth.dto.request.UserSignUpRequest;
+import com.signal.domain.auth.dto.request.UserUpdateRequest;
 import com.signal.domain.auth.model.enums.AvailableDays;
 import com.signal.domain.auth.model.enums.Gender;
 import com.signal.domain.auth.model.enums.Role;
@@ -20,8 +23,8 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
-@Table(name = "user")
 @Getter
+@Table(name = "user")
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
@@ -71,4 +74,23 @@ public class User extends BaseEntity {
     @Column(name = "modified_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifiedAt;
+
+
+    public void update(UserUpdateRequest userUpdateRequest) {
+        if(userUpdateRequest.getEmail() != null) {
+            this.email = userUpdateRequest.getEmail();
+        }
+
+        if(userUpdateRequest.getNickname() != null) {
+            this.nickname = userUpdateRequest.getNickname();
+        }
+
+        if(userUpdateRequest.getImage() != null) {
+            this.image = userUpdateRequest.getImage();
+        }
+    }
+
+    public void update(String newPassword) {
+        this.password = newPassword;
+    }
 }

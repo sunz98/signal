@@ -1,21 +1,17 @@
 package com.signal.domain.comment.service;
 
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.signal.domain.auth.repository.UserRepository;
+import com.signal.domain.auth.repository.AuthRepository;
 import com.signal.domain.comment.dto.resquest.CommentCreateRequest;
 import com.signal.domain.comment.dto.resquest.CommentUpdateRequest;
 import com.signal.domain.comment.model.Comment;
 import com.signal.domain.comment.repository.CommentRepository;
 import com.signal.domain.post.repository.PostRepository;
-import com.signal.domain.post.service.ChatGPTServiceImpl;
-import com.signal.domain.post.service.PostService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 public class CommentService {
 	private final PostRepository postRepository;
 	private final CommentRepository commentRepository;
-	private final UserRepository userRepository;
+	private final AuthRepository authRepository;
 
 	@Transactional
 	public void createComment(CommentCreateRequest request) {
 	    var post = postRepository.findById(request.getPostId())
 	            .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
 	    
-	    var user = userRepository.findById(request.getUserId())
+	    var user = authRepository.findById(request.getUserId())
 	            .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
 	    Comment comment = new Comment(post, user, request.getContents());

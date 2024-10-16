@@ -16,6 +16,10 @@ public enum ErrorCode {
     //Authentication Errors
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED.value(), "401", "로그인이 필요합니다."),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "402", "올바르지 않는 사용자 ID 입니다."),
+    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST.value(), "403", "이미 가입된 이메일입니다."),
+    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST.value(), "404", "잘못된 인증 번호입니다."),
+    INVALID_VERIFY(HttpStatus.BAD_REQUEST.value(), "405", "이메일 인증이 필요합니다."),
+    INVALID_LOGIN_INFORMATION(HttpStatus.BAD_REQUEST.value(), "406", "아이디 및 비밀번호가 틀렸습니다."),
 
     //AUTH
     NOT_LOGGED_IN(HttpStatus.UNAUTHORIZED.value(), "A001", "로그인이 필요합니다."),

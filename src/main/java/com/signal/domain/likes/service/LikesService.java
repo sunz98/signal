@@ -1,7 +1,7 @@
 package com.signal.domain.likes.service;
 
 import com.signal.domain.auth.model.User;
-import com.signal.domain.auth.repository.UserRepository;
+import com.signal.domain.auth.repository.AuthRepository;
 import com.signal.domain.likes.model.Likes;
 import com.signal.domain.likes.repository.LikesRepository;
 import com.signal.domain.post.model.Post;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 public class LikesService {
 
     private final LikesRepository likesRepository;
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
     private final PostRepository postRepository;
 
     public String likesPost(Long postId, Long userId) {
-        User user = userRepository.findUserById(userId);
+        User user = authRepository.findUserById(userId);
         Post post = postRepository.findPostById(postId);
 
         if (likesRepository.existsLikesById(postId, userId)) {

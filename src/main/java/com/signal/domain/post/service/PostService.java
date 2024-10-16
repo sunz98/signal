@@ -1,12 +1,10 @@
 package com.signal.domain.post.service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.signal.domain.auth.model.User;
-import com.signal.domain.auth.repository.UserRepository;
+import com.signal.domain.auth.repository.AuthRepository;
 import com.signal.domain.post.dto.request.CompletionRequestDto;
 import com.signal.domain.post.dto.request.PostRequest;
 import com.signal.domain.post.dto.response.FilterResponse;
@@ -19,12 +17,9 @@ import com.signal.domain.post.repository.PostRepository;
 import com.signal.global.dto.PagedDto;
 import com.signal.global.exception.errorCode.ErrorCode;
 import com.signal.global.exception.handler.InvalidValueException;
-import io.swagger.v3.core.util.Json;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Filter;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
     private final ChatGPTServiceImpl chatGPTService;
 
     @Transactional
@@ -83,7 +78,7 @@ public class PostService {
 
         // userId  검증필요, 임시 User 생성
         // consultant가 아닌지도 확인 필요 추후 수정해야 함.
-        User user = userRepository.findUserById(userId);
+        User user = authRepository.findUserById(userId);
 
         FilterResponse filterResponse = filterChatGPT(postRequest.getTitle() + " " + postRequest.getContents());
 
