@@ -27,6 +27,7 @@ public class PostResponse {
         return PostResponse.builder()
             .id(post.getId())
             .title(post.getTitle())
+            .category(post.getCategory())
             .createdAt(post.getCreatedAt())
             .viewCount(post.getViewCount())
             .likesCount(post.getLikesCount())
