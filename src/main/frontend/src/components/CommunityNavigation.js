@@ -1,7 +1,7 @@
 // src/components/CommunityNavigation.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './CommunityNavigation.css'; // 스타일 파일
+import './CommunityNavigation.css';
 
 const CommunityNavigation = () => {
   const [isGominOpen, setIsGominOpen] = useState(false);
