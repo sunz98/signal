@@ -1,0 +1,28 @@
+/* ConsultingSection.css */
+.consulting-section {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px;
+  }
+  
+  .consultant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+  }
+  
+  .consultant img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .consultant span {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  

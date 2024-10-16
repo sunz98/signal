@@ -1,0 +1,32 @@
+/* HotPosts.css */
+.hot-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .hot-post {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .hot-post:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .hot-post h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .hot-post p {
+    margin: 5px 0 0;
+    color: #555;
+  }
+  
