@@ -39,6 +39,7 @@ public class CommentController {
 	@Operation(summary="댓글 수정")
 	@PutMapping("/common/post/{postId}/comment/{commentId}")
 	public ResponseEntity<Void> updateComment(
+			@PathVariable Long postId,
 			@PathVariable Long commentId,
 			@RequestBody CommentUpdateRequest request){
 			commentService.updateComment(commentId, request);
@@ -48,6 +49,7 @@ public class CommentController {
 	@Operation(summary="댓글 삭제")
 	@DeleteMapping("/common/post/{postId}/comment/{commentId}")
 	public ResponseEntity<Void> deleteComment(
+			@PathVariable Long postId,
 			@PathVariable Long commentId
 			){
 			commentService.deleteComment(commentId);
