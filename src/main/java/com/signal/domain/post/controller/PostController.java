@@ -33,7 +33,7 @@ public class PostController {
     private final PostService postService;
 
     @Operation(summary = "게시판 전체 조회")
-    @GetMapping("/commmon/post")
+    @GetMapping("/common/post")
     public ResponseEntity<PagedDto<SearchResponse>> getPosts (
         @RequestParam Category category,
         @RequestParam(required = false, value = "size", defaultValue = "10") int size,
