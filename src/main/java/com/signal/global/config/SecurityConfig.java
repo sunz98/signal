@@ -42,19 +42,25 @@ public class SecurityConfig {
 		
     	http //인가
     		.authorizeHttpRequests((auth)-> auth
+    				.requestMatchers("/","/api/auth/login","/loginProc").permitAll()
     				.requestMatchers(swagger).permitAll()
+    				.requestMatchers("/api/common/**","/api/auth/edit/**").hasAnyRole("USER","CONSULTANT")
     				.requestMatchers("/api/auth/consultant/**","/api/consultant/**").hasRole("CONSULTANT")
     				.requestMatchers("/api/auth/user/**","/api/user/**","/api/member/**").hasRole("USER")
-    				.requestMatchers("/api/common/**","/api/auth/edit/**").hasAnyRole("USER","CONSULTANT")
     				.requestMatchers("/api/auth/**").permitAll()
-    				.anyRequest().authenticated());
+    			.anyRequest().authenticated());
+    
     	http
     	.formLogin((auth)->auth
     			.loginPage("/api/auth/login")
-    			.loginProcessingUrl("/login") // 프론트 폼 액션값이랑 일치해야함
+    			.loginProcessingUrl("/loginProc") // 프론트 폼 액션값이랑 일치해야함
     			.permitAll());
     	
     	//csrf
+    	http
+    		.csrf((auth)->auth.disable());
+    	
+    	
     	http
     		.logout((auth)->auth.logoutUrl("/api/auth/logout")
     				.logoutSuccessUrl("/")); // 로그아웃 후 리다이렉트 경로
