@@ -37,26 +37,8 @@ public class SecurityConfig {
     }
     
 
-    
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(
-                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authorizeHttpRequests(
-            auth -> auth.requestMatchers(swagger).permitAll()
-                .requestMatchers("/api/chatGPT/**").permitAll()
-                .anyRequest().permitAll());
-        
-        
-
-        return http.build();
-    }
-    
     @Bean // 커스텀으로 시큐리티 작성시 필요한 필터들은 활성화시켜야함/ 비활성화도 마찬가지
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	
     	
     	http
@@ -65,6 +47,7 @@ public class SecurityConfig {
     	
     	http //인가
     		.authorizeHttpRequests((auth)-> auth
+    				.requestMatchers(swagger).permitAll()
     				.requestMatchers("/api/auth/consultant/**","/api/consultant/**").hasRole("CONSULTANT")
     				.requestMatchers("/api/auth/user/**","/api/user/**","/api/member/**").hasRole("USER")
     				.requestMatchers("/api/common/**","/api/auth/edit/**").hasAnyRole("USER","CONSULTANT")
@@ -85,7 +68,7 @@ public class SecurityConfig {
     	http
         .cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(Arrays.asList("창오주소"));  // CORS 허용 도메인 설정
+            config.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000"));  // CORS 허용 도메인 설정
             config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));      // 허용할 HTTP 메서드 설정
             config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));     // 허용할 요청 헤더 설정
             return config;
