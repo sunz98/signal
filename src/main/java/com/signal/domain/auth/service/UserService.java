@@ -14,6 +14,8 @@ import com.signal.global.exception.handler.EntityNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class UserService {
     private final AuthRepository authRepository;
     private final EmailService emailService;
     //TODO : SecurityConfig 만들어지면 @EnableWebSecuriy 어노테이션 있을 경우 에러 해결됨
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public String userSignup(UserSignUpRequest userSignUpRequest) {
         authRepository.existsUserByEmail(userSignUpRequest.getEmail());
