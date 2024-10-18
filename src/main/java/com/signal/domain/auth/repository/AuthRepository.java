@@ -26,8 +26,6 @@ public interface AuthRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.userId = :userId")
     User findUserByEmailAndUserId(@Param("email") String email, @Param("userId") String userId);
 
-    @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.password = :password")
-    User findUserByUserIdAndPassword(@Param("userId") String userId, @Param("password") String password);
-
-    User findByUserId(String userId);
+    @Query("SELECT u FROM User u WHERE u.userId = :userId ")
+    User findByUserId(@Param("userId") String userId);
 }

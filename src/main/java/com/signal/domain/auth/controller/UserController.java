@@ -98,7 +98,7 @@ public class UserController {
     @Operation(summary = "로그인")
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "/login";
     }
 
     @Operation(summary = "로그아웃")

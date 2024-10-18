@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final String[] swagger = {
@@ -40,6 +40,9 @@ public class SecurityConfig {
     @Bean // 커스텀으로 시큐리티 작성시 필요한 필터들은 활성화시켜야함/ 비활성화도 마찬가지
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+		http
+			.csrf(csrf -> csrf.disable());
+
     	http //인가
     		.authorizeHttpRequests((auth)-> auth
     				.requestMatchers(swagger).permitAll()
@@ -50,15 +53,14 @@ public class SecurityConfig {
     				.anyRequest().authenticated());
     	http
     	.formLogin((auth)->auth
-    			.loginPage("/api/auth/login")
+//    			.loginPage("/login") // 프론트 엔드 주소값
     			.loginProcessingUrl("/login") // 프론트 폼 액션값이랑 일치해야함
     			.permitAll());
-    	
-    	//csrf
+
     	http
     		.logout((auth)->auth.logoutUrl("/api/auth/logout")
     				.logoutSuccessUrl("/")); // 로그아웃 후 리다이렉트 경로
-    	
+
     	//cors
     	http
         .cors(cors -> cors.configurationSource(request -> {
