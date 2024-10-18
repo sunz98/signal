@@ -51,6 +51,7 @@ public class SecurityConfig {
     				.requestMatchers("/api/common/**","/api/auth/edit/**").hasAnyRole("USER","CONSULTANT")
     				.requestMatchers("/api/auth/**").permitAll()
     				.anyRequest().authenticated());
+
     	http
     	.formLogin((auth)->auth
 //    			.loginPage("/login") // 프론트 엔드 주소값
@@ -60,7 +61,7 @@ public class SecurityConfig {
     	http
     		.logout((auth)->auth.logoutUrl("/api/auth/logout")
     				.logoutSuccessUrl("/")); // 로그아웃 후 리다이렉트 경로
-
+    	
     	//cors
     	http
         .cors(cors -> cors.configurationSource(request -> {

@@ -109,4 +109,10 @@ public class UserController {
         request.getSession().invalidate();
         SecurityContextHolder.clearContext();
     }
+//    
+//    @GetMapping("/")
+//    public String rootRedirect() {
+//        return "redirect:/api/auth/login";  // 루트 경로에 접속하면 로그인 페이지로 리디렉트
+//    }
+
 }
