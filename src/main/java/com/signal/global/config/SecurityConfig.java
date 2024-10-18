@@ -39,7 +39,7 @@ public class SecurityConfig {
 
     @Bean // 커스텀으로 시큐리티 작성시 필요한 필터들은 활성화시켜야함/ 비활성화도 마찬가지
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		
+
     	http //인가
     		.authorizeHttpRequests((auth)-> auth
     				.requestMatchers(swagger).permitAll()
