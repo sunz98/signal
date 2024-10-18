@@ -40,10 +40,7 @@ public class SecurityConfig {
     @Bean // 커스텀으로 시큐리티 작성시 필요한 필터들은 활성화시켜야함/ 비활성화도 마찬가지
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	
-    	
-    	http
-    		.requiresChannel((auth)->auth.
-    				anyRequest().requiresSecure()); 
+
     	
     	http //인가
     		.authorizeHttpRequests((auth)-> auth
@@ -56,7 +53,7 @@ public class SecurityConfig {
     	http
     	.formLogin((auth)->auth
     			.loginPage("/api/auth/login")
-    			.loginProcessingUrl("/login") // 프론트 폼 액션값이랑 일치해야함
+    			.loginProcessingUrl("/loginProc") // 프론트 폼 액션값이랑 일치해야함
     			.permitAll());
     	
     	//csrf
