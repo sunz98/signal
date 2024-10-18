@@ -2,25 +2,20 @@ package com.signal.domain.auth.service;
 
 import com.signal.domain.auth.dto.request.ConsultantSignUpRequest;
 import com.signal.domain.auth.dto.request.EmailRequest;
-import com.signal.domain.auth.dto.request.LoginReqeust;
 import com.signal.domain.auth.dto.request.UserPasswordResetRequest;
 import com.signal.domain.auth.dto.request.UserSignUpRequest;
 import com.signal.domain.auth.dto.request.UserUpdateRequest;
 import com.signal.domain.auth.dto.response.FindIdResponse;
-import com.signal.domain.auth.dto.response.LoginResponse;
 import com.signal.domain.auth.model.User;
 import com.signal.domain.auth.model.enums.Role;
 import com.signal.domain.auth.repository.AuthRepository;
 import com.signal.global.exception.errorCode.ErrorCode;
 import com.signal.global.exception.handler.EntityNotFoundException;
-import com.signal.global.exception.handler.InvalidValueException;
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -123,32 +118,4 @@ public class UserService {
 
         return "User Password Reset Successfully";
     }
-
-    @Transactional
-    public LoginResponse login(LoginReqeust loginReqeust) {
-        String userId = loginReqeust.getUserId();
-        String password = loginReqeust.getPassword();
-
-        User user = authRepository.findUserByUserIdAndPassword(userId, password);
-
-        if (user.getRole().equals(Role.USER)) {
-            return userLogin(loginReqeust);
-        } else if (user.getRole().equals(Role.CONSULTANT)) {
-            return consultantLogin(loginReqeust);
-        } else {
-            throw new EntityNotFoundException(ErrorCode.USER_NOT_FOUND);
-        }
-    }
-    
-    // TODO : 합친 후 수정 필요
-    public LoginResponse userLogin(LoginReqeust loginReqeust) {
-        return LoginResponse.builder().accessToken("123").refreshToken("123").build();
-    }
-
-    public LoginResponse consultantLogin(LoginReqeust loginReqeust) {
-        return LoginResponse.builder().accessToken("123").refreshToken("123").build();
-    }
-
-    @Transactional
-    public void logout(HttpServletRequest request) {}
 }

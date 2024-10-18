@@ -3,11 +3,11 @@ package com.signal.domain.post.controller;
 import com.signal.domain.post.dto.request.PostRequest;
 import com.signal.domain.post.dto.response.FilterResponse;
 import com.signal.domain.post.dto.response.PostDetailResponse;
-import com.signal.domain.post.dto.response.PostResponse;
 import com.signal.domain.post.dto.response.SearchResponse;
 import com.signal.domain.post.model.enums.Category;
 import com.signal.domain.post.service.PostService;
 import com.signal.global.dto.PagedDto;
+import com.signal.global.sercurity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -54,31 +54,31 @@ public class PostController {
     @Operation(summary = "게시글 작성")
     @PostMapping("/user/post")
     public ResponseEntity<FilterResponse> createPost(
-        @Valid @RequestBody PostRequest postReqeust
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails
+        @Valid @RequestBody PostRequest postReqeust,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-//        Long userId = customUserDetails.getUserId();
-        return ResponseEntity.ok(postService.createPost(postReqeust, 1L));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(postService.createPost(postReqeust, userId));
     }
 
     @Operation(summary = "게시글 수정")
     @PutMapping("/user/post/{postId}")
     public ResponseEntity<FilterResponse> updatePost(
         @Valid @RequestBody PostRequest postRequest,
-        @PathVariable Long postId
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails
+        @PathVariable Long postId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-//        Long userId = customeUserDetails.getUserId();
-        return ResponseEntity.ok(postService.updatePost(postRequest, postId, 1L));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(postService.updatePost(postRequest, postId, userId));
     }
 
     @Operation(summary = "게시글 삭제")
     @DeleteMapping("/user/post/{postId}")
     public void deletePost(
-        @PathVariable Long postId
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails
+        @PathVariable Long postId,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-//        Long userId = customUserDetails.getUserId();
-        postService.deletePost(postId, 1L);
+        Long userId = customUserDetails.getUserId();
+        postService.deletePost(postId, userId);
     }
 }

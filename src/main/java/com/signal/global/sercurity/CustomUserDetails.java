@@ -1,5 +1,6 @@
 package com.signal.global.sercurity;
 
+import com.signal.domain.auth.dto.response.UserDetailResponse;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,6 +16,14 @@ public class CustomUserDetails implements UserDetails {
 	
 	public CustomUserDetails(User user) {
 		this.user=user;
+	}
+
+	public Long getUserId() {
+		return user.getId();
+	}
+
+	public UserDetailResponse getUserDetails() {
+		return UserDetailResponse.toDto(user);
 	}
 
 	@Override

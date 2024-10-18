@@ -2,23 +2,21 @@ package com.signal.domain.auth.controller;
 
 import com.signal.domain.auth.dto.request.ConsultantSignUpRequest;
 import com.signal.domain.auth.dto.request.EmailRequest;
-import com.signal.domain.auth.dto.request.LoginReqeust;
 import com.signal.domain.auth.dto.request.UserPasswordResetRequest;
 import com.signal.domain.auth.dto.request.UserSignUpRequest;
 import com.signal.domain.auth.dto.request.UserUpdateRequest;
 import com.signal.domain.auth.dto.response.FindIdResponse;
-import com.signal.domain.auth.dto.response.LoginResponse;
+import com.signal.domain.auth.dto.response.UserDetailResponse;
 import com.signal.domain.auth.service.UserService;
+import com.signal.global.sercurity.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,13 +41,13 @@ public class UserController {
         return ResponseEntity.ok(userService.userSignup(userSignUpRequest));
     }
 
-//    @GetMapping("/user/my-information")
-//    @Operation(summary = "일반 사용자 정보 조회")
-//    public ResponseEntity<UserDetailResponse> getUserDetails(
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails
-//    ) {
-//        return ResponseEntity.ok(customUserDetails.getUserDetails());
-//    }
+    @GetMapping("/user/my-information")
+    @Operation(summary = "일반 사용자 정보 조회")
+    public ResponseEntity<UserDetailResponse> getUserDetails(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        return ResponseEntity.ok(customUserDetails.getUserDetails());
+    }
 
     @PostMapping("/consultant-signup")
     @Operation(summary = "전문가 사용자 회원가입")
@@ -60,23 +58,23 @@ public class UserController {
         return ResponseEntity.ok(userService.consultantSignup(consultantSignUpRequest));
     }
 
-//    @GetMapping("/consultant/my-information")
-//    @Operation(summary = "전문가 사용자 정보 조회")
-//    public ResponseEntity<UserDetailResponse> getUserDetails(
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails
-//    ) {
-//        return ResponseEntity.ok(customUserDetails.getUserDetails());
-//    }
+    @GetMapping("/consultant/my-information")
+    @Operation(summary = "전문가 사용자 정보 조회")
+    public ResponseEntity<UserDetailResponse> getConsultantDetails(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        return ResponseEntity.ok(customUserDetails.getUserDetails());
+    }
 
     @PutMapping("/edit/my-information")
     @Operation(summary = "일반 사용자 회원정보 수정")
     public ResponseEntity<String> editUserInformation (
         @Valid @RequestBody
-        UserUpdateRequest userUpdateRequest
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails
+        UserUpdateRequest userUpdateRequest,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-//        Long userId = customUserDetails.getId();
-        return ResponseEntity.ok(userService.editUserInformation(userUpdateRequest, 1L));
+        Long userId = customUserDetails.getUserId();
+        return ResponseEntity.ok(userService.editUserInformation(userUpdateRequest, userId));
     }
 
     @GetMapping("/find-id")
@@ -98,14 +96,9 @@ public class UserController {
     }
 
     @Operation(summary = "로그인")
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
-        @RequestBody LoginReqeust loginReqeust
-    ) {
-        LoginResponse loginResponse = userService.login(loginReqeust);
-        return ResponseEntity.ok()
-            .header("Authorization", "Bearer " + loginResponse.getAccessToken())
-            .body(loginResponse);
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @Operation(summary = "로그아웃")
@@ -113,6 +106,7 @@ public class UserController {
     public void logout(
         HttpServletRequest request
     ){
-        userService.logout(request);
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
     }
 }
