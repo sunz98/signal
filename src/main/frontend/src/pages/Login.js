@@ -10,7 +10,7 @@ const Login = () => {
       <div className="logo">
         <h1>Signal</h1> {/* 로고와 텍스트를 포함 */}
       </div>
-      <form className="login-form" action="http://localhost:8080/login" method="POST">
+      <form className="login-form" action="/login" method="POST">
         <input
           id="userId"
           type="text"
