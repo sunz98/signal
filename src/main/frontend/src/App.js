@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -10,6 +9,7 @@ import WritePage from './pages/WritePage';
 import PostDetailPage from './pages/PostDetailPage';
 import MainPage from './pages/HomePage'; // 메인 페이지
 import HomePage from './pages/HomePage';
+import Login from './pages/Login'; // 로그인 페이지 import 추가
 
 function App() {
   return (
@@ -29,6 +29,9 @@ function App() {
 
             {/* 게시글 상세 페이지 */}
             <Route path="/post/:postId" element={<PostDetailPage />} />
+
+            {/* 로그인 페이지 경로 수정 */}
+            <Route path="/login" element={<Login />} />
 
             {/* 404 페이지 */}
             <Route path="*" element={<div>페이지를 찾을 수 없습니다.</div>} />
