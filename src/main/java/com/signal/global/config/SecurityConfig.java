@@ -2,6 +2,7 @@ package com.signal.global.config;
 
 import java.util.Arrays;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -54,8 +56,9 @@ public class SecurityConfig {
 
     	http
     	.formLogin((auth)->auth
-    			.loginPage("/login") // 프론트 엔드 주소값
+    			.loginPage("/api/auth/login") // 프론트 엔드 주소값
     			.loginProcessingUrl("/login") // 프론트 폼 액션값이랑 일치해야함
+				.successForwardUrl("/")
     			.permitAll());
 
     	http
@@ -93,4 +96,5 @@ public class SecurityConfig {
         return web -> web.ignoring().requestMatchers("/img/**");
     }
     */
+
 }
