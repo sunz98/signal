@@ -54,8 +54,9 @@ public class SecurityConfig {
 
     	http
     	.formLogin((auth)->auth
-    			.loginPage("/Login") // 프론트 엔드 주소값
-    			.loginProcessingUrl("http://localhost:8080/login") // 프론트 폼 액션값이랑 일치해야함
+    			.loginPage("/login") // 프론트 엔드 주소값
+    			.loginProcessingUrl("/login") // 프론트 폼 액션값이랑 일치해야함
+   
     			.permitAll());
 
     	http

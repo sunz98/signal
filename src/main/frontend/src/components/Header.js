@@ -1,21 +1,27 @@
-// src/components/Header.js
-import React, {useState} from 'react';   //usestate는 로그인 여부 판별
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // useNavigate 훅 추가
 import './Header.css';
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
 
   const handleLoginLogout = () => {
-    setIsLoggedIn(!isLoggedIn); // 로그인 상태를 토글
+    if (isLoggedIn) {
+      // 로그아웃 처리
+      setIsLoggedIn(false);
+    } else {
+      // 로그인 상태가 아니면 로그인 페이지로 이동
+      navigate('/login');
+    }
   };
 
   return (
     <header className="header">
-      <div className='header-content'>
+      <div className="header-content">
         <div className="logo">
           <Link to="/">
-          <img src="/img/mainlogo.png" alt="Signal Logo" className="logo-image" />
+            <img src="/img/mainlogo.png" alt="Signal Logo" className="logo-image" />
           </Link>
         </div>
         
