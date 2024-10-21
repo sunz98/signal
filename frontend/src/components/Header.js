@@ -1,5 +1,5 @@
 // src/components/Header.js
-import React, {useState} from 'react';   //usestate는 로그인 여부 판별
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 
@@ -12,13 +12,13 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className='header-content'>
+      <div className="header-content">
         <div className="logo">
           <Link to="/">
-          <img src="/img/mainlogo.png" alt="Signal Logo" className="logo-image" />
+            <img src="/img/mainlogo.png" alt="Signal Logo" className="logo-image" />
           </Link>
         </div>
-        
+
         <nav className="nav-links">
           <Link to="/article">Article</Link>
           <Link to="/community">Community</Link>
@@ -30,7 +30,10 @@ const Header = () => {
               <button onClick={handleLoginLogout}>Logout</button>
             </>
           ) : (
-            <button onClick={handleLoginLogout}>Login</button>
+            // 로그인 상태가 아닌 경우 로그인 버튼을 누르면 Login 페이지로 이동
+            <Link to="/login">
+              <button onClick={handleLoginLogout}>Login</button>
+            </Link>
           )}
         </nav>
       </div>

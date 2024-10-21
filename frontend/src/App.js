@@ -10,6 +10,7 @@ import WritePage from './pages/WritePage';
 import PostDetailPage from './pages/PostDetailPage';
 import MainPage from './pages/HomePage'; // 메인 페이지
 import HomePage from './pages/HomePage';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
 
             {/* 404 페이지 */}
             <Route path="*" element={<div>페이지를 찾을 수 없습니다.</div>} />
+
+            <Route path="/login" component={Login} />
           </Routes>
         </main>
         <Footer />
