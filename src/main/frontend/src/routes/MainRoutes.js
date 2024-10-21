@@ -5,6 +5,7 @@ import HomePage from '../pages/HomePage';
 import ArticlePage from '../pages/ArticlePage';
 import MyPage from '../pages/MyPage';
 import ConsultingPage from '../pages/ConsultingPage';
+import Login from "../pages/Login";
 
 const MainRoutes = () => {
   return (
