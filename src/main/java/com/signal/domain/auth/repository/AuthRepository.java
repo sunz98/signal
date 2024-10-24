@@ -19,7 +19,7 @@ public interface AuthRepository extends JpaRepository<User, Long> {
     User findUserByEmail(String email);
 
     default boolean existsUserByEmail(String email) {
-        if (findUserByEmail(email) == null) throw new InvalidValueException(ErrorCode.DUPLICATE_EMAIL);
+        if (findUserByEmail(email) != null) throw new InvalidValueException(ErrorCode.DUPLICATE_EMAIL);
         return true;
     }
 

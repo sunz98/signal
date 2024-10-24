@@ -40,7 +40,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

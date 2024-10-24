@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmailService {
 
     private final AuthRepository authRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final JavaMailSender mailSender;
 
     private static final String EMAIL_VERIFICATION_PREFIX = "email:verification:";
@@ -37,8 +37,10 @@ public class EmailService {
         String verificationCode = generateVerificationCode();
         redisTemplate
             .opsForValue()
-            .set(EMAIL_VERIFICATION_PREFIX + email, verificationCode, Duration.ofSeconds(5));
+            .set(EMAIL_VERIFICATION_PREFIX + email, verificationCode, Duration.ofMinutes(5));
         sendVerificationCode(email, "Signal 인증코드", "인증코드 : " + verificationCode);
+        log.info("Storing verification code in Redis: key={}, code={}", EMAIL_VERIFICATION_PREFIX + email, verificationCode);
+
 
         return "Email Send Success";
     }
@@ -48,24 +50,25 @@ public class EmailService {
         String email = emailVerifyRequest.getEmail();
         String verificationCode = emailVerifyRequest.getVerificationCode();
 
-        String key = EMAIL_VERIFIED_PREFIX + email;
-        String storedCode = (String) redisTemplate.opsForValue().get(key);
+        String key = EMAIL_VERIFICATION_PREFIX + email;
+        String storedCode = redisTemplate.opsForValue().get(key);
+        log.info("Verify email code : {}", storedCode);
 
         if(storedCode == null || !storedCode.equals(verificationCode)) {
             throw new InvalidValueException(ErrorCode.INVALID_VERIFICATION_CODE);
         }
 
         redisTemplate.delete(key);
-        redisTemplate.opsForValue().set(EMAIL_VERIFIED_PREFIX + email, true);
+        redisTemplate.opsForValue().set(EMAIL_VERIFIED_PREFIX + email, "true");
 
         return "Email Verify Success";
     }
 
     @Transactional
     public void isEmailVerified(String email) {
-        Boolean isVerified = (Boolean) redisTemplate.opsForValue().get(EMAIL_VERIFIED_PREFIX + email);
+        String isVerified = redisTemplate.opsForValue().get(EMAIL_VERIFIED_PREFIX + email);
 
-        if (isVerified == null || !isVerified) {
+        if (!isVerified.equals("true")) {
             throw new InvalidValueException(ErrorCode.INVALID_VERIFY);
         }
     }

@@ -5,6 +5,7 @@ import com.signal.domain.auth.model.enums.Gender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class ConsultantSignUpRequest {
     private String nickname;
 
     @NotBlank
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
     @NotBlank
     private Gender gender;
