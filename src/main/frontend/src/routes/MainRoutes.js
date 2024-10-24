@@ -14,9 +14,11 @@ const MainRoutes = () => {
       <Route path="/article" element={<ArticlePage />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/consulting" element={<ConsultingPage />} />
+
       <Route path="/login" element={<Login />} />
 
       <Route path="/community/*" element={<CommunityRoutes />} /> 
+
     </Routes>
   );
 };
