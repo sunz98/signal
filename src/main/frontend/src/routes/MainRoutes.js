@@ -13,7 +13,7 @@ const MainRoutes = () => {
       <Route path="/article" element={<ArticlePage />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/consulting" element={<ConsultingPage />} />
-      <Route path="/login" element={<Login />} /> {/* 로그인 페이지 경로 추가 */}
+      <Route path="/Login" element={<Login />} /> {/* 로그인 페이지 경로 추가 */}
     </Routes>
   );
 };

@@ -1,16 +1,16 @@
 package com.signal.global.config;
 
+import com.signal.global.sercurity.CustomAuthenticationFailureHandler;
+import com.signal.global.sercurity.CustomAuthenticationSuccessHandler;
+import com.signal.global.sercurity.CustomUserDetailsService;
 import java.util.Arrays;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -30,14 +30,13 @@ public class SecurityConfig {
         "/v3/api-docs/**",
         "/v3/api-docs"
     };
-    
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-    	
 		return new BCryptPasswordEncoder(); //암호화 메서드
-    	
+
     }
-    
+
 
     @Bean // 커스텀으로 시큐리티 작성시 필요한 필터들은 활성화시켜야함/ 비활성화도 마찬가지
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -56,15 +55,17 @@ public class SecurityConfig {
 
     	http
     	.formLogin((auth)->auth
-    			.loginPage("/api/auth/login") // 프론트 엔드 주소값
+				.loginPage("/api/auth/login")
     			.loginProcessingUrl("/login") // 프론트 폼 액션값이랑 일치해야함
-				.defaultSuccessUrl("/")
+				.usernameParameter("userId")
+				.successHandler(new CustomAuthenticationSuccessHandler())
+				.failureHandler(new CustomAuthenticationFailureHandler())
     			.permitAll());
 
     	http
     		.logout((auth)->auth.logoutUrl("/api/auth/logout")
     				.logoutSuccessUrl("/")); // 로그아웃 후 리다이렉트 경로
-    	
+
     	//cors
     	http
         .cors(cors -> cors.configurationSource(request -> {
@@ -75,8 +76,8 @@ public class SecurityConfig {
             return config;
         }));
 
-    	
-    	
+
+
     	// 세션 관련
     	http
     		.sessionManagement((auth)->auth
@@ -85,11 +86,12 @@ public class SecurityConfig {
     	http
     		.sessionManagement((auth)->auth
     				.sessionFixation().changeSessionId());
-    	
+
         return http.build();
     }
+
     /*
-    
+
     @Bean //필터를 거칠필요 없는경우
     public WebSecurityCustomizer webSecurityCustomizer() {
 

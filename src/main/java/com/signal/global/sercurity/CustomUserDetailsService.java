@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.signal.domain.auth.model.User;
@@ -17,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomUserDetailsService implements UserDetailsService {
 	
 	private final AuthRepository authRepository;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		
@@ -30,5 +31,4 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		throw new UsernameNotFoundException(userId);
 	}
-
 }
