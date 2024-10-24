@@ -20,12 +20,11 @@ const CategoryMenu = () => {
 
   return (
     <div className="category-menu">
-      <div className="category-header">
-        <h2 className="category-title">Categories</h2>
+        <h2 className="category-title">Categories
         <button className="more-button" onClick={() => navigate('/community')}>
           더 보기 &gt;
         </button>
-      </div>
+        </h2>
       <div className="categories-container">
         {categories.map((category) => (
           <div

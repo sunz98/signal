@@ -19,7 +19,7 @@ const GominDetailPage = () => {
   };
 
   const handleWritePost = () => {
-    navigate('/community/write');
+    navigate('/commmunity/write');
   };
 
   const mapCategoryToBackendFormat = (category) => {
