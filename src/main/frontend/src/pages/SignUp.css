@@ -1,0 +1,77 @@
+/* 회원가입 페이지 스타일 */
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fff;
+  }
+  
+  .logo img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+  }
+  
+  .signup-form input {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 2px solid black;
+    background-color: transparent;
+  }
+  
+  .signup-form input:focus {
+    outline: none;
+  }
+  
+  .birthdate-section,
+  .gender-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .birthdate-section select,
+  .gender-section select {
+    width: 32%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+  }
+  
+  .email-verify-button {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  
+  .signup-button {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .signup-button:hover,
+  .email-verify-button:hover {
+    background-color: #444;
+  }
+  

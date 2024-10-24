@@ -8,7 +8,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="logo">
-        <h1>Signal</h1> {/* 로고와 텍스트를 포함 */}
+        <img src="/img/loginLogo.png" alt="Signal Logo" /> {/* 로고 이미지 추가 */}
       </div>
       <form className="login-form" action="/login" method="POST">
         <input
@@ -30,7 +30,7 @@ const Login = () => {
         <button type="submit" className="login-button">로그인</button>
       </form>
       <div className="login-links">
-        <a href="/register">회원가입</a>
+        <a href="/signup">회원가입</a>
         <a href="/find-id">아이디 찾기</a>
         <a href="/find-password">비밀번호 찾기</a>
       </div>
