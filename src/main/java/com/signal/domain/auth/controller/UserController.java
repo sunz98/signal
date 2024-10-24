@@ -17,14 +17,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 @Tag(name = "Auth", description = "로그인/로그아웃/회원가입")
@@ -98,7 +98,7 @@ public class UserController {
     @Operation(summary = "로그인")
     @GetMapping("/login")
     public String login() {
-        return "/Login";
+        return "/login";
     }
 
     @Operation(summary = "로그아웃")

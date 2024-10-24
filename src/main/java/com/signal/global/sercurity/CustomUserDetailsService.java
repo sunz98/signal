@@ -1,6 +1,7 @@
 package com.signal.global.sercurity;
 
 import com.signal.domain.auth.repository.AuthRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +11,7 @@ import com.signal.domain.auth.model.User;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,6 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		User userData=authRepository.findByUserId(userId);
 		
 		if(userData!=null) {
+			log.info("User found with userId: {}", userId);
+			log.info("UserData : {}", userData);
 			return new CustomUserDetails(userData); 
 		}
 		throw new UsernameNotFoundException(userId);
