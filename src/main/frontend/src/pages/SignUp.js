@@ -15,6 +15,9 @@ const SignUp = () => {
     emailCode: '',
   });
 
+  const [isEmailVerified, setIsEmailVerified] = useState(false); // 이메일 인증 여부
+  const [emailSent, setEmailSent] = useState(false); // 이메일 전송 여부
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -23,16 +26,121 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  // 회원가입 요청
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 회원가입 로직 추가
-    console.log(formData);
+
+    // 생년월일 형식을 "YYYY-MM-DD"로 변환
+    const birthday = `${formData.birthYear}-${formData.birthMonth.padStart(2, '0')}-${formData.birthDay.padStart(2, '0')}`;
+
+    // 성별을 서버에서 요구하는 형식으로 변환 (예: 'male' -> 'MALE')
+    const gender = formData.gender === 'male' ? 'MALE' : 'FEMALE';
+
+    // 비밀번호 확인 일치 여부 확인
+    if (formData.password !== formData.confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    // 이메일 인증 여부 확인
+    if (!isEmailVerified) {
+      alert("이메일 인증을 완료해주세요.");
+      return;
+    }
+
+    const dataToSend = {
+      userId: formData.userId,
+      password: formData.password,
+      nickname: formData.nickname,
+      birthday: birthday, // "YYYY-MM-DD" 형식으로 변환
+      gender: gender,      // 'MALE' 또는 'FEMALE'
+      email: formData.email,
+    };
+
+    try {
+      const response = await fetch('/api/auth/user-signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (response.ok) {
+        alert('회원가입이 완료되었습니다.');
+      } else {
+        const errorData = await response.json();
+        alert(`회원가입 실패: ${errorData.message || '서버 오류'}`);
+      }
+    } catch (error) {
+      console.error('회원가입 중 오류 발생:', error);
+      alert('서버와의 통신 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 이메일 인증 코드 발송
+  const handleEmailVerification = async () => {
+    if (!formData.email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/auth/register/send-email-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email }),
+      });
+
+      if (response.ok) {
+        alert('인증 코드가 발송되었습니다.');
+        setEmailSent(true); // 이메일 발송 완료
+      } else {
+        alert('인증 코드 발송에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('이메일 인증 중 오류 발생:', error);
+      alert('서버와의 통신 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 이메일 인증 코드 검증
+  const handleEmailCodeVerification = async () => {
+    if (!formData.emailCode) {
+      alert('인증 코드를 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/auth/register/verify-email-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          verificationCode: formData.emailCode,
+        }),
+      });
+
+      if (response.ok) {
+        alert('이메일 인증이 완료되었습니다.');
+        setIsEmailVerified(true); // 이메일 인증 완료 처리
+      } else {
+        alert('인증 코드가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      console.error('이메일 코드 인증 중 오류 발생:', error);
+      alert('서버와의 통신 중 오류가 발생했습니다.');
+    }
   };
 
   return (
     <div className="signup-container">
       <div className="logo">
-        <img src="/img/loginLogo.png" alt="Signal Logo" /> {/* 로고 이미지 */}
+        <img src="/img/loginLogo.png" alt="Signal Logo" />
       </div>
       <form className="signup-form" onSubmit={handleSubmit}>
         <input
@@ -71,7 +179,14 @@ const SignUp = () => {
             onChange={handleChange}
           >
             <option value="">연도</option>
-            {/* 연도 옵션 추가 */}
+            {[...Array(100)].map((_, i) => {
+              const year = new Date().getFullYear() - i;
+              return (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              );
+            })}
           </select>
           <select
             name="birthMonth"
@@ -79,7 +194,11 @@ const SignUp = () => {
             onChange={handleChange}
           >
             <option value="">월</option>
-            {/* 월 옵션 추가 */}
+            {[...Array(12)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
           <select
             name="birthDay"
@@ -87,7 +206,11 @@ const SignUp = () => {
             onChange={handleChange}
           >
             <option value="">일</option>
-            {/* 일 옵션 추가 */}
+            {[...Array(31)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -106,14 +229,31 @@ const SignUp = () => {
           value={formData.email}
           onChange={handleChange}
         />
-        <button type="button" className="email-verify-button">인증</button>
+        <button
+          type="button"
+          className="email-verify-button"
+          onClick={handleEmailVerification}
+          disabled={emailSent} // 이메일 발송 후 버튼 비활성화
+        >
+          {emailSent ? '인증 코드 발송 완료' : '인증'}
+        </button>
+
         <input
           type="text"
           name="emailCode"
           placeholder="이메일 인증 번호를 입력해주세요."
           value={formData.emailCode}
           onChange={handleChange}
+          disabled={!emailSent} // 이메일이 발송되지 않으면 인증 번호 입력 불가
         />
+        <button
+          type="button"
+          className="email-code-verify-button"
+          onClick={handleEmailCodeVerification}
+          disabled={isEmailVerified} // 이메일 인증 완료 시 버튼 비활성화
+        >
+          {isEmailVerified ? '인증 완료' : '인증 코드 확인'}
+        </button>
 
         <button type="submit" className="signup-button">회원가입</button>
       </form>
