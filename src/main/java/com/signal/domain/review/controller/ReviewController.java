@@ -79,7 +79,7 @@ public class ReviewController {
 	}
 	
 	
-	@GetMapping("/common/consultant/reviewDetail")
+	@GetMapping("/openApi/consultant/reviewDetail")
     @Operation(summary = "리뷰 조회")
     public ResponseEntity<ConsultantDetailReviewResponse> getReviewById(
     		@RequestParam("reviewId") Long reviewId

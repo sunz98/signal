@@ -189,4 +189,20 @@ public class ChattingService {
 
         return PagedDto.toDTO(page, size, totalPages, List.of(chattingResponse));
     }
+    
+    public Long getUnreadMessagesCountByRoom(Long roomId) {
+        return chattingMessagesRepository.countUnreadMessagesByRoomId(roomId);
+    }
+    
+    public Long getUnreadMessagesCountAcrossAllRooms() {
+        return chattingMessagesRepository.countUnreadMessagesAcrossAllRooms();
+    }
+
+    @Transactional
+    public void markMessagesAsRead(Long roomId) {
+        chattingMessagesRepository.markMessagesAsReadByRoomId(roomId);
+    }
+
+    
+    
 }

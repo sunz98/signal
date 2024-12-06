@@ -24,7 +24,7 @@ public class ArticleController {
     private final ArticleService articleService;
 
     // 아티클 전체 조회 (페이지네이션)
-    @GetMapping("/common/article")
+    @GetMapping("/openApi/article")
     @Operation(summary = "아티클 전체 조회")
     public ResponseEntity<PagedDto<SearchResponse>> getAllArticles(
             @RequestParam int page,
@@ -34,7 +34,7 @@ public class ArticleController {
     }
 
     // 특정 ID로 아티클 단일 조회
-    @GetMapping("/common/article/{articleId}")
+    @GetMapping("/openApi/article/{articleId}")
     @Operation(summary = "특정 ID로 아티클 단일 조회")
     public ResponseEntity<ArticleDetailResponse> getArticleById(
             @PathVariable Long articleId) {
@@ -99,7 +99,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "추천 아티클 조회")
-    @GetMapping("/common/home/recommend-article")
+    @GetMapping("/openApi/home/recommend-article")
     public ResponseEntity<List<RecommendArticleResponse>> getRecommendArticle() {
         List<RecommendArticleResponse> articles = articleService.getRecommendArticle();
 

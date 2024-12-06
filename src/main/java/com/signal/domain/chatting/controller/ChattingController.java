@@ -4,10 +4,12 @@ import com.signal.domain.auth.model.enums.Role;
 
 import com.signal.domain.chatting.dto.request.ChattingMessageRequest;
 import com.signal.domain.chatting.dto.request.ChattingRoomRequest;
+import com.signal.domain.chatting.dto.request.UnreadMessagesByRoomRequest;
 import com.signal.domain.chatting.dto.response.ChattingMessageResponse;
 
 import com.signal.domain.chatting.dto.response.ChattingResponse;
 import com.signal.domain.chatting.dto.response.ChattingRoomWithMessagesResponse;
+import com.signal.domain.chatting.dto.response.UnreadMessagesByRoomResponse;
 import com.signal.domain.chatting.model.ChattingMessages;
 import com.signal.domain.chatting.model.ChattingRoom;
 import com.signal.domain.chatting.model.enums.ChattingRoomStatus;
@@ -38,7 +40,7 @@ public class ChattingController {
     }
 
     @Operation(summary = "채팅방 생성")
-    @PostMapping("/auth/chat/room")
+    @PostMapping("/openApi/chat/room")
     public ChattingRoomWithMessagesResponse createRoom(@RequestBody ChattingRoomRequest request) {
         ChattingRoom room = chattingService.getOrCreateRoom(request);
         return ChattingRoomWithMessagesResponse.builder()
@@ -52,14 +54,14 @@ public class ChattingController {
     }
 
 	@Operation(summary = "채팅 종료")
-	@PutMapping("/auth/chat/room/{roomId}/status")
+	@PutMapping("/openApi/chat/room/{roomId}/status")
 	public void updateRoomStatus(@PathVariable Long roomId) {
 		chattingService.completeChattingRoom(roomId);
 	}
 
 
     @Operation(summary = "메시지 전송")
-    @PostMapping("/auth/chat/message")
+    @PostMapping("/openApi/chat/message")
     public ChattingMessageResponse sendMessage(@RequestBody ChattingMessageRequest request) {
         ChattingMessages messages=chattingService.sendMessage(request);
 		return ChattingMessageResponse.builder()
@@ -74,7 +76,7 @@ public class ChattingController {
 
     
     @Operation(summary = "방 정보와 메시지 조회 (커서 페이지네이션)")
-    @GetMapping("/auth/chat/room/{roomId}/details")
+    @GetMapping("/openApi/chat/room/{roomId}/details")
     public ChattingRoomWithMessagesResponse getRoomDetails(
             @PathVariable Long roomId,
             @RequestParam(defaultValue = "20") int size, 
@@ -83,6 +85,7 @@ public class ChattingController {
           
             
     ) {
+    	chattingService.markMessagesAsRead(roomId);
         return chattingService.getRoomWithMessages(roomId,cursor, size,role);
     }
 
@@ -111,4 +114,26 @@ public class ChattingController {
 
         return ResponseEntity.ok(response);
     }
+    
+    @PostMapping("/common/chat/unread/room")
+    @Operation(summary = "특정 채팅방 안 읽은 메시지 개수 조회")
+    public ResponseEntity<UnreadMessagesByRoomResponse> getUnreadMessagesByRoom(
+            @RequestBody UnreadMessagesByRoomRequest request) {
+        Long unreadCount = chattingService.getUnreadMessagesCountByRoom(request.getRoomId());
+        UnreadMessagesByRoomResponse response = UnreadMessagesByRoomResponse.builder()
+                .roomId(request.getRoomId())
+                .unreadCount(unreadCount)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/common/chat/unread/total")
+    @Operation(summary = "전체 채팅방 안 읽은 메시지 총 개수 조회")
+    public ResponseEntity<Long> getUnreadMessagesCountAcrossAllRooms() {
+        Long totalUnreadCount = chattingService.getUnreadMessagesCountAcrossAllRooms();
+        return ResponseEntity.ok(totalUnreadCount);
+    }
+
+    
+    
 }

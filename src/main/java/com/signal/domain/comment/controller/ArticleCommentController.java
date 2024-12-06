@@ -81,7 +81,7 @@ public class ArticleCommentController {
 	}
 
 	@Operation(summary="댓글 조회")
-	@GetMapping("/common/article/{article}/comment")
+	@GetMapping("/openApi/article/{article}/comment")
 	public ResponseEntity<CursorPagedDto<ArticleCommentResponse>> getCommentByPostId(
 	        @PathVariable Long article,
 	        @RequestParam(required = false) Long cursorId,

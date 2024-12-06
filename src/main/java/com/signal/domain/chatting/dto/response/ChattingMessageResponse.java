@@ -24,6 +24,7 @@ public class ChattingMessageResponse {
     private LocalDateTime sentAt;
     private LocalDateTime lastActivityAt;
     private Long senderId;
+    private boolean isRead;
 
     public ChattingMessageResponse(ChattingMessages message) {
         this.messageId = message.getId();
@@ -32,6 +33,7 @@ public class ChattingMessageResponse {
         this.sentAt = message.getCreatedAt();
         this.lastActivityAt=message.getChattingRoom().getLastActivityAt();
         this.senderId=message.getUserId().getId();
+        this.isRead=message.isRead();
         
     }
 }
